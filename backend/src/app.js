@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import { criarRotasLeitura } from './rotas/recursos.js';
 import { criarRotasAlunos } from './rotas/alunos.js';
+import { criarRotasTurmas } from './rotas/turmas.js';
+import { criarRotasConfiguracoes } from './rotas/configuracoes.js';
 import { rotaNaoEncontrada, tratarErros } from './middlewares/erros.js';
 
 export const ORIGEM_FRONT = 'http://localhost:5173';
@@ -17,7 +19,8 @@ export function criarApp() {
   app.use('/api/disciplinas', criarRotasLeitura('disciplinas'));
   app.use('/api/professores', criarRotasLeitura('professores'));
   app.use('/api/alunos', criarRotasAlunos());
-  app.use('/api/turmas', criarRotasLeitura('turmas'));
+  app.use('/api/turmas', criarRotasTurmas());
+  app.use('/api/configuracoes', criarRotasConfiguracoes());
 
   app.use(rotaNaoEncontrada);
   app.use(tratarErros);

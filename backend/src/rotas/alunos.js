@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { lerDb, salvarDb, proximoId } from '../db.js';
 import { ErroHttp } from '../middlewares/erros.js';
 import { criarRotasLeitura } from './recursos.js';
+import { ofertasDoAluno } from '../regras/matricula.js';
 
 // A matrícula é o ano atual seguido de um sequencial de 3 dígitos (ex.: 2026007).
 // Quem gera é sempre o servidor: o número enviado pelo front é ignorado.
@@ -43,6 +44,13 @@ export function criarRotasAlunos() {
     db.alunos.push(aluno);
     await salvarDb(db);
     res.status(201).json(aluno);
+  });
+
+  rotas.get('/:id/ofertas', async (req, res) => {
+    const db = await lerDb();
+    const aluno = db.alunos.find((item) => item.id === Number(req.params.id));
+    if (!aluno) throw new ErroHttp(404, `Aluno ${req.params.id} não encontrado`);
+    res.json(ofertasDoAluno(aluno, db));
   });
 
   // GET / e GET /:id vêm das rotas de leitura genéricas.
