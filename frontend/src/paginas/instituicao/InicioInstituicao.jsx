@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { listar } from '../../api/cliente';
 import { SEMESTRE_ATUAL } from '../../constantes';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
-import { cargaDoProfessor, nivelDeUso, percentual, pontosDeAtencao } from '../../utilitarios/indicadores';
+import { cargaDoProfessor, percentual, pontosDeAtencao } from '../../utilitarios/indicadores';
 import AlertaErro from '../../componentes/AlertaErro';
+import BarraUso from '../../componentes/BarraUso';
+import ConfiguracoesMatricula from './ConfiguracoesMatricula';
 import CabecalhoPagina from '../../componentes/CabecalhoPagina';
 import CartaoIndicador from '../../componentes/CartaoIndicador';
 import EstadoVazio from '../../componentes/EstadoVazio';
@@ -140,8 +142,9 @@ function ConteudoPainel({ disciplinas, professores, alunos, turmas }) {
           </div>
         </div>
 
-        <div className="col-lg-5">
-          <div className="card h-100">
+        <div className="col-lg-5 d-grid gap-3 align-content-start">
+          <ConfiguracoesMatricula />
+          <div className="card">
             <div className="card-header py-3">
               <h2 className="h6 mb-0">
                 <i className="bi bi-speedometer2 me-2 text-primary" aria-hidden="true" />
@@ -149,29 +152,15 @@ function ConteudoPainel({ disciplinas, professores, alunos, turmas }) {
               </h2>
             </div>
             <div className="card-body d-grid gap-3">
-              {cargas.map((professor) => {
-                const uso = percentual(professor.carga, professor.cargaMaxima);
-                return (
-                  <div key={professor.id}>
-                    <div className="d-flex justify-content-between small mb-1">
-                      <span className="fw-medium">{professor.nome}</span>
-                      <span className="text-body-secondary">
-                        {professor.carga}/{professor.cargaMaxima} horários
-                      </span>
-                    </div>
-                    <div
-                      className="progress"
-                      role="progressbar"
-                      aria-label={`Carga de ${professor.nome}`}
-                      aria-valuenow={uso}
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    >
-                      <div className={`progress-bar bg-${nivelDeUso(uso)}`} style={{ width: `${uso}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
+              {cargas.map((professor) => (
+                <BarraUso
+                  key={professor.id}
+                  rotulo={professor.nome}
+                  valor={professor.carga}
+                  maximo={professor.cargaMaxima}
+                  detalhe={`${professor.carga}/${professor.cargaMaxima} horários`}
+                />
+              ))}
             </div>
           </div>
         </div>
