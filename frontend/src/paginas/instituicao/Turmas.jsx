@@ -155,7 +155,11 @@ export default function Turmas() {
                       <span className="fw-semibold">{turma.codigo}</span>
                       <span className="d-block small text-body-secondary">{disciplinaPorId(turma.disciplinaId)?.nome}</span>
                     </td>
-                    <td className="text-nowrap">{professorPorId(turma.professorId)?.nome}</td>
+                    <td className="text-nowrap">
+                      <Link to={`/instituicao/professores/${turma.professorId}`} className="link-nome">
+                        {professorPorId(turma.professorId)?.nome}
+                      </Link>
+                    </td>
                     <td>
                       <ListaHorarios horarios={turma.horarios} />
                     </td>

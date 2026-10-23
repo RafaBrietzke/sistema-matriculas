@@ -4,10 +4,14 @@ import LayoutApp from './componentes/LayoutApp';
 import RotaProtegida from './componentes/RotaProtegida';
 import Login from './paginas/Login';
 import NaoEncontrada from './paginas/NaoEncontrada';
-import EmConstrucao from './paginas/EmConstrucao';
 import InicioInstituicao from './paginas/instituicao/InicioInstituicao';
 import InicioAluno from './paginas/aluno/InicioAluno';
 import Turmas from './paginas/instituicao/Turmas';
+import Disciplinas from './paginas/instituicao/Disciplinas';
+import Professores from './paginas/instituicao/Professores';
+import Alunos from './paginas/instituicao/Alunos';
+import PerfilProfessor from './paginas/instituicao/PerfilProfessor';
+import PerfilAluno from './paginas/instituicao/PerfilAluno';
 import FormularioTurma from './paginas/instituicao/FormularioTurma';
 import TurmasOfertadas from './paginas/aluno/TurmasOfertadas';
 import MinhasMatriculas from './paginas/aluno/MinhasMatriculas';
@@ -29,9 +33,11 @@ export default function App() {
       <Route path="instituicao" element={<RotaProtegida perfil="instituicao" />}>
         <Route element={<LayoutApp />}>
           <Route index element={<InicioInstituicao />} />
-          <Route path="disciplinas" element={<EmConstrucao titulo="Disciplinas" />} />
-          <Route path="professores" element={<EmConstrucao titulo="Professores" />} />
-          <Route path="alunos" element={<EmConstrucao titulo="Alunos" />} />
+          <Route path="disciplinas" element={<Disciplinas />} />
+          <Route path="professores" element={<Professores />} />
+          <Route path="professores/:id" element={<PerfilProfessor />} />
+          <Route path="alunos" element={<Alunos />} />
+          <Route path="alunos/:id" element={<PerfilAluno />} />
           <Route path="turmas" element={<Turmas />} />
           <Route path="turmas/nova" element={<FormularioTurma />} />
           <Route path="turmas/:id/editar" element={<FormularioTurma />} />
