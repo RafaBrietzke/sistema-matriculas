@@ -12,6 +12,8 @@ export default function ModalConfirmacao({
   processando = false,
   aoConfirmar,
   aoCancelar,
+  tamanho = 'sm',
+  children,
 }) {
   // Fecha com a tecla Esc.
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function ModalConfirmacao({
         aria-labelledby="modal-confirmacao-titulo"
         onClick={(evento) => evento.target === evento.currentTarget && !processando && aoCancelar()}
       >
-        <div className="modal-dialog modal-dialog-centered modal-sm">
+        <div className={`modal-dialog modal-dialog-centered modal-${tamanho}`}>
           <div className="modal-content">
             <div className="modal-body p-4 text-center">
               <span className={`icone-bolha icone-bolha-lg bg-${variante}-subtle text-${variante}-emphasis mb-3`}>
@@ -45,6 +47,7 @@ export default function ModalConfirmacao({
                 {titulo}
               </h2>
               {mensagem && <p className="text-body-secondary mb-0">{mensagem}</p>}
+              {children}
             </div>
             <div className="d-flex gap-2 px-4 pb-4">
               <button type="button" className="btn btn-neutro flex-fill" onClick={aoCancelar} disabled={processando} autoFocus>
