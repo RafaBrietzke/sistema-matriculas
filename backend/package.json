@@ -1,0 +1,17 @@
+{
+  "name": "matriculaweb-backend",
+  "version": "1.0.0",
+  "description": "API REST do sistema de atendimento e matrículas",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0"
+  }
+}

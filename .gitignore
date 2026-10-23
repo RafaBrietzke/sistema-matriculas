@@ -4,3 +4,9 @@ dist/
 *.log
 .env
 .specs/
+backend/data/db.json
+
+# Claude / specs e regras de negócio (spec-driven)
+.claude/
+CLAUDE.md
+CLAUDE.local.md

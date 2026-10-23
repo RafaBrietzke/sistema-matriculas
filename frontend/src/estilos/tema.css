@@ -1,0 +1,263 @@
+:root,
+[data-bs-theme='light'] {
+  --bs-font-sans-serif: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --bs-body-font-family: var(--bs-font-sans-serif);
+  --bs-body-bg: #f6f7fb;
+  --bs-body-bg-rgb: 246, 247, 251;
+  --bs-body-color: #0f172a;
+  --bs-body-color-rgb: 15, 23, 42;
+  --bs-secondary-color: #64748b;
+  --bs-secondary-bg: #e2e8f0;
+  --bs-tertiary-bg: #f1f5f9;
+  --bs-border-color: #e2e8f0;
+  --bs-border-color-translucent: rgba(15, 23, 42, 0.08);
+  --bs-border-radius: 0.625rem;
+  --bs-border-radius-sm: 0.5rem;
+  --bs-border-radius-lg: 0.875rem;
+  --bs-border-radius-xl: 1rem;
+
+  --bs-primary: #4f46e5;
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-primary-text-emphasis: #3730a3;
+  --bs-primary-bg-subtle: #eef2ff;
+  --bs-primary-border-subtle: #c7d2fe;
+  --bs-link-color: #4f46e5;
+  --bs-link-color-rgb: 79, 70, 229;
+  --bs-link-hover-color: #4338ca;
+  --bs-link-hover-color-rgb: 67, 56, 202;
+  --bs-focus-ring-color: rgba(79, 70, 229, 0.25);
+  --bs-box-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --bs-box-shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.18);
+
+  /* Tokens próprios do app */
+  --app-surface: #ffffff;
+  --app-primaria: #4f46e5;
+  --app-primaria-rgb: 79, 70, 229;
+  --app-primaria-hover: #4338ca;
+  --app-primaria-ativa: #3730a3;
+  --app-sidebar-bg: #0f172a;
+  --app-sidebar-cor: #94a3b8;
+  --app-sidebar-cor-hover: #e2e8f0;
+  --app-sidebar-titulo: #64748b;
+  --app-sidebar-ativo-bg: rgba(99, 102, 241, 0.2);
+  --app-sidebar-destaque: #818cf8;
+  --app-sidebar-borda: rgba(148, 163, 184, 0.12);
+}
+
+[data-bs-theme='dark'] {
+  --bs-body-bg: #0b1120;
+  --bs-body-bg-rgb: 11, 17, 32;
+  --bs-body-color: #e2e8f0;
+  --bs-body-color-rgb: 226, 232, 240;
+  --bs-secondary-color: #94a3b8;
+  --bs-secondary-bg: #1e293b;
+  --bs-tertiary-bg: #111827;
+  --bs-border-color: #1e293b;
+  --bs-border-color-translucent: rgba(148, 163, 184, 0.14);
+
+  /* Primária mais clara para textos (contraste no fundo escuro) */
+  --bs-primary: #a5b4fc;
+  --bs-primary-rgb: 165, 180, 252;
+  --bs-primary-text-emphasis: #c7d2fe;
+  --bs-primary-bg-subtle: rgba(99, 102, 241, 0.16);
+  --bs-primary-border-subtle: #3730a3;
+  --bs-link-color: #a5b4fc;
+  --bs-link-color-rgb: 165, 180, 252;
+  --bs-link-hover-color: #c7d2fe;
+  --bs-link-hover-color-rgb: 199, 210, 254;
+  --bs-box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --bs-box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+
+  --app-surface: #111827;
+  --app-primaria: #6366f1;
+  --app-primaria-rgb: 99, 102, 241;
+  --app-primaria-hover: #4f46e5;
+  --app-primaria-ativa: #4338ca;
+  --app-sidebar-bg: #020617;
+}
+
+/* ---------- Tipografia ---------- */
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* ---------- Componentes do Bootstrap compilados com a cor padrão ---------- */
+
+.btn {
+  --bs-btn-font-weight: 500;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--app-primaria);
+  --bs-btn-border-color: var(--app-primaria);
+  --bs-btn-hover-bg: var(--app-primaria-hover);
+  --bs-btn-hover-border-color: var(--app-primaria-hover);
+  --bs-btn-active-bg: var(--app-primaria-ativa);
+  --bs-btn-active-border-color: var(--app-primaria-ativa);
+  --bs-btn-disabled-bg: var(--app-primaria);
+  --bs-btn-disabled-border-color: var(--app-primaria);
+  --bs-btn-focus-shadow-rgb: var(--app-primaria-rgb);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary-border-subtle);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--app-primaria);
+  --bs-btn-hover-border-color: var(--app-primaria);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--app-primaria-ativa);
+  --bs-btn-active-border-color: var(--app-primaria-ativa);
+  --bs-btn-focus-shadow-rgb: var(--app-primaria-rgb);
+}
+
+.card {
+  --bs-card-bg: var(--app-surface);
+  --bs-card-border-color: var(--bs-border-color);
+  --bs-card-cap-bg: transparent;
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
+.list-group {
+  --bs-list-group-bg: var(--app-surface);
+  --bs-list-group-action-color: var(--bs-body-color);
+  --bs-list-group-action-hover-color: var(--bs-body-color);
+  --bs-list-group-active-bg: var(--app-primaria);
+  --bs-list-group-active-border-color: var(--app-primaria);
+}
+
+.dropdown-menu {
+  --bs-dropdown-bg: var(--app-surface);
+  --bs-dropdown-border-color: var(--bs-border-color);
+  --bs-dropdown-link-active-bg: var(--app-primaria);
+  --bs-dropdown-box-shadow: var(--bs-box-shadow);
+  box-shadow: var(--bs-dropdown-box-shadow);
+}
+
+.modal {
+  --bs-modal-bg: var(--app-surface);
+  --bs-modal-border-radius: var(--bs-border-radius-xl);
+  --bs-modal-border-color: var(--bs-border-color);
+}
+
+.toast {
+  --bs-toast-bg: var(--app-surface);
+  --bs-toast-border-color: var(--bs-border-color);
+  --bs-toast-max-width: 380px;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--app-surface);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(var(--app-primaria-rgb), 0.6);
+  box-shadow: 0 0 0 0.25rem rgba(var(--app-primaria-rgb), 0.18);
+}
+
+.form-check-input:checked {
+  background-color: var(--app-primaria);
+  border-color: var(--app-primaria);
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-bg: var(--app-primaria);
+}
+
+.progress {
+  --bs-progress-height: 0.5rem;
+  --bs-progress-bg: var(--bs-secondary-bg);
+  --bs-progress-bar-bg: var(--app-primaria);
+  --bs-progress-border-radius: 999px;
+}
+
+/* ---------- Utilitários do app ---------- */
+
+/* Quadrado arredondado com ícone (indicadores, estados vazios) */
+.icone-bolha {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.icone-bolha-lg {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  font-size: 1.75rem;
+}
+
+/* Card inteiro clicável */
+.card-link-app {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.card-link-app:hover {
+  color: inherit;
+  border-color: var(--bs-primary-border-subtle);
+  box-shadow: var(--bs-box-shadow);
+}
+
+/* Abas em formato de controle segmentado */
+.abas-segmentadas {
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background-color: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.75rem;
+}
+
+.abas-segmentadas .nav-link {
+  color: var(--bs-secondary-color);
+  font-weight: 500;
+  border-radius: 0.5rem;
+}
+
+.abas-segmentadas .nav-link.active {
+  color: var(--bs-body-color);
+  background-color: var(--app-surface);
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
+.texto-pequeno {
+  font-size: 0.8125rem;
+}
+
+.titulo-secao {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Botão neutro que acompanha o tema (o .btn-light continua claro no modo escuro) */
+.btn-neutro {
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-bg: var(--app-surface);
+  --bs-btn-border-color: var(--bs-border-color);
+  --bs-btn-hover-color: var(--bs-body-color);
+  --bs-btn-hover-bg: var(--bs-tertiary-bg);
+  --bs-btn-hover-border-color: var(--bs-border-color);
+  --bs-btn-active-color: var(--bs-body-color);
+  --bs-btn-active-bg: var(--bs-secondary-bg);
+  --bs-btn-active-border-color: var(--bs-border-color);
+}
+
+.min-w-0 {
+  min-width: 0;
+}
