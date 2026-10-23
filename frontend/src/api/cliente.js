@@ -17,6 +17,7 @@ export async function requisicao(caminho, opcoes = {}) {
   if (!resposta.ok) {
     const erro = new Error(corpo?.erro ?? `Erro ${resposta.status} ao acessar a API`);
     erro.status = resposta.status;
+    erro.motivos = corpo?.motivos ?? [];
     throw erro;
   }
   return corpo;
@@ -32,4 +33,28 @@ export function buscar(recurso, id) {
 
 export function criar(recurso, dados) {
   return requisicao(`/${recurso}`, { method: 'POST', body: JSON.stringify(dados) });
+}
+
+export function atualizar(recurso, id, dados) {
+  return requisicao(`/${recurso}/${id}`, { method: 'PUT', body: JSON.stringify(dados) });
+}
+
+export function enviar(caminho, dados) {
+  return requisicao(caminho, { method: 'POST', body: JSON.stringify(dados) });
+}
+
+export function remover(caminho) {
+  return requisicao(caminho, { method: 'DELETE' });
+}
+
+export function buscarConfiguracoes() {
+  return requisicao('/configuracoes');
+}
+
+export function salvarConfiguracoes(dados) {
+  return requisicao('/configuracoes', { method: 'PUT', body: JSON.stringify(dados) });
+}
+
+export function buscarOfertasDoAluno(alunoId) {
+  return requisicao(`/alunos/${alunoId}/ofertas`);
 }

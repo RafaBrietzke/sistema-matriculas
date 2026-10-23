@@ -3,10 +3,10 @@ import { buscar, listar } from '../../api/cliente';
 import { SEMESTRE_ATUAL } from '../../constantes';
 import { useSessao } from '../../contexto/sessao';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
-import { descreverHorario } from '../../utilitarios/horarios';
 import { percentual, plural } from '../../utilitarios/indicadores';
 import AlertaErro from '../../componentes/AlertaErro';
 import Avatar from '../../componentes/Avatar';
+import ListaHorarios from '../../componentes/ListaHorarios';
 import CartaoIndicador from '../../componentes/CartaoIndicador';
 import EstadoVazio from '../../componentes/EstadoVazio';
 import { EsqueletoCartoes, EsqueletoLista } from '../../componentes/Esqueleto';
@@ -130,14 +130,7 @@ export default function InicioAluno() {
                             {disciplina?.codigo} · Prof. {professorPorId(turma.professorId)?.nome}
                           </span>
                         </div>
-                        <div className="d-flex flex-wrap gap-1 align-items-start">
-                          {turma.horarios.map((codigo) => (
-                            <span key={codigo} className="badge rounded-pill bg-primary-subtle text-primary-emphasis fw-medium">
-                              <i className="bi bi-clock me-1" aria-hidden="true" />
-                              {descreverHorario(codigo, true)}
-                            </span>
-                          ))}
-                        </div>
+                        <ListaHorarios horarios={turma.horarios} />
                       </div>
                     </li>
                   );

@@ -261,3 +261,33 @@ h1, h2, h3, h4, h5, h6,
 .min-w-0 {
   min-width: 0;
 }
+
+.seletor-horarios {
+  min-width: 420px;
+  --bs-table-bg: transparent;
+}
+
+.celula-horario {
+  min-height: 2.5rem;
+}
+
+.celula-ocupada,
+.celula-ocupada:disabled {
+  color: var(--bs-danger-text-emphasis);
+  background-color: var(--bs-danger-bg-subtle);
+  border-color: var(--bs-danger-border-subtle);
+  opacity: 1;
+}
+
+.legenda-horario {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.25rem;
+  vertical-align: -0.1em;
+  border-radius: 0.25rem;
+}
+
+.d-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
