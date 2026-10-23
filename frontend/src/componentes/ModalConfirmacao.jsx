@@ -13,6 +13,8 @@ export default function ModalConfirmacao({
   aoConfirmar,
   aoCancelar,
   tamanho = 'sm',
+  podeConfirmar = true,
+  ocultarConfirmar = false,
   children,
 }) {
   // Fecha com a tecla Esc.
@@ -53,10 +55,12 @@ export default function ModalConfirmacao({
               <button type="button" className="btn btn-neutro flex-fill" onClick={aoCancelar} disabled={processando} autoFocus>
                 {textoCancelar}
               </button>
-              <button type="button" className={`btn btn-${variante} flex-fill`} onClick={aoConfirmar} disabled={processando}>
-                {processando && <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />}
-                {textoConfirmar}
-              </button>
+              {!ocultarConfirmar && (
+                <button type="button" className={`btn btn-${variante} flex-fill`} onClick={aoConfirmar} disabled={processando || !podeConfirmar}>
+                  {processando && <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />}
+                  {textoConfirmar}
+                </button>
+              )}
             </div>
           </div>
         </div>
