@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { atualizar, criar, listar } from '../../api/cliente';
 import { useNotificacao } from '../../contexto/notificacao';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
@@ -59,11 +59,14 @@ export default function FormularioTurma() {
 function Formulario({ titulo, turma, turmas, disciplinas, professores }) {
   const navegar = useNavigate();
   const { notificar } = useNotificacao();
+  const [parametros] = useSearchParams();
+  const horarioSugerido = parametros.get('horario');
+  const professorSugerido = professores.find((p) => p.id === Number(parametros.get('professor')));
   const [form, setForm] = useState({
     disciplinaId: turma ? String(turma.disciplinaId) : '',
-    professorId: turma ? String(turma.professorId) : '',
+    professorId: turma ? String(turma.professorId) : professorSugerido ? String(professorSugerido.id) : '',
     vagas: turma ? String(turma.vagas) : '30',
-    horarios: turma ? [...turma.horarios] : [],
+    horarios: turma ? [...turma.horarios] : /^[2-7][1-3]$/.test(horarioSugerido ?? '') ? [horarioSugerido] : [],
   });
   const [tentouSalvar, setTentouSalvar] = useState(false);
   const [salvando, setSalvando] = useState(false);

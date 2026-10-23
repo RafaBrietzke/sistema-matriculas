@@ -11,6 +11,8 @@ import Turmas from './paginas/instituicao/Turmas';
 import FormularioTurma from './paginas/instituicao/FormularioTurma';
 import TurmasOfertadas from './paginas/aluno/TurmasOfertadas';
 import MinhasMatriculas from './paginas/aluno/MinhasMatriculas';
+import MinhaGrade from './paginas/aluno/MinhaGrade';
+import GradeGeral from './paginas/instituicao/GradeGeral';
 
 // "/" leva para a página inicial do perfil logado, ou para o login.
 function RedirecionarInicio() {
@@ -33,7 +35,7 @@ export default function App() {
           <Route path="turmas" element={<Turmas />} />
           <Route path="turmas/nova" element={<FormularioTurma />} />
           <Route path="turmas/:id/editar" element={<FormularioTurma />} />
-          <Route path="grade" element={<EmConstrucao titulo="Grade geral" />} />
+          <Route path="grade" element={<GradeGeral />} />
         </Route>
       </Route>
 
@@ -42,7 +44,7 @@ export default function App() {
           <Route index element={<InicioAluno />} />
           <Route path="turmas" element={<TurmasOfertadas />} />
           <Route path="matriculas" element={<MinhasMatriculas />} />
-          <Route path="grade" element={<EmConstrucao titulo="Minha grade" />} />
+          <Route path="grade" element={<MinhaGrade />} />
         </Route>
       </Route>
 
