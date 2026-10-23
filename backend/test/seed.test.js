@@ -16,7 +16,8 @@ test('seed tem a massa de dados combinada', () => {
   assert.equal(seed.disciplinas.length, 12);
   assert.equal(seed.professores.length, 5);
   assert.equal(seed.alunos.length, 6);
-  assert.ok(seed.turmas.length >= 6 && seed.turmas.length <= 8);
+  assert.ok(seed.turmas.length >= 6 && seed.turmas.length <= 10);
+  assert.deepEqual(seed.configuracoes, { semestreAtual: '2026/2', periodoMatriculaAberto: true, limiteCreditos: 20 });
 });
 
 test('todas as referências do seed existem', () => {
@@ -28,6 +29,8 @@ test('todas as referências do seed existem', () => {
   for (const a of seed.alunos) assert.ok(cursos.has(a.curso), `curso do aluno ${a.id}`);
   for (const a of seed.alunos) a.aprovadas.forEach((id) => assert.ok(disciplinas.has(id), `aprovada ${id}`));
   for (const t of seed.turmas) {
+    const disciplina = seed.disciplinas.find((d) => d.id === t.disciplinaId);
+    assert.match(t.codigo, new RegExp(`^${disciplina?.codigo}-[A-Z]$`), `turma ${t.id} código`);
     assert.ok(disciplinas.has(t.disciplinaId), `turma ${t.id} disciplina`);
     assert.ok(professores.has(t.professorId), `turma ${t.id} professor`);
     t.alunos.forEach((id) => assert.ok(alunos.has(id), `turma ${t.id} aluno ${id}`));
