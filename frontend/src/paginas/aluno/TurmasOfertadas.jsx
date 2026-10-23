@@ -6,13 +6,19 @@ import { useSessao } from '../../contexto/sessao';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
 import { DIAS, TURNOS, descreverHorario } from '../../utilitarios/horarios';
 import { plural } from '../../utilitarios/indicadores';
+import { corDaDisciplina } from '../../utilitarios/cores';
 import AlertaErro from '../../componentes/AlertaErro';
 import BarraUso from '../../componentes/BarraUso';
 import CabecalhoPagina from '../../componentes/CabecalhoPagina';
 import EstadoVazio from '../../componentes/EstadoVazio';
+import GradeHoraria from '../../componentes/GradeHoraria';
 import { EsqueletoCartoes } from '../../componentes/Esqueleto';
 import ListaHorarios from '../../componentes/ListaHorarios';
 import ModalConfirmacao from '../../componentes/ModalConfirmacao';
+
+function paraEvento(oferta) {
+  return { id: oferta.id, horarios: oferta.horarios, titulo: oferta.codigo, cor: corDaDisciplina(oferta.disciplina.id) };
+}
 
 export default function TurmasOfertadas() {
   const { sessao } = useSessao();
@@ -166,10 +172,21 @@ export default function TurmasOfertadas() {
             `(limite ${configuracoes.limiteCreditos}).`
         }
         textoConfirmar="Confirmar matrícula"
+        tamanho="lg"
         processando={processando}
         aoConfirmar={confirmarMatricula}
         aoCancelar={() => setEscolhida(null)}
-      />
+      >
+        {escolhida && (
+          <div className="mt-3 text-start">
+            <p className="texto-pequeno fw-semibold text-body-secondary mb-2">Prévia da sua semana</p>
+            <GradeHoraria
+              compacta
+              eventos={[...ofertas.filter((o) => o.matriculado).map(paraEvento), { ...paraEvento(escolhida), destaque: true }]}
+            />
+          </div>
+        )}
+      </ModalConfirmacao>
     </>
   );
 }
