@@ -22,6 +22,18 @@
   }
 }
 
+.app-rodape {
+  margin-top: auto;
+  padding: 1rem;
+  border-top: 1px solid var(--bs-border-color);
+}
+
+@media (min-width: 992px) {
+  .app-rodape {
+    padding: 1rem 2rem;
+  }
+}
+
 /* ---------- Barra lateral ---------- */
 
 .app-sidebar-painel {
@@ -75,11 +87,10 @@
   place-items: center;
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0.625rem;
+  border-radius: 0.5rem;
   color: #fff;
   font-size: 1.125rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  box-shadow: 0 6px 16px -6px rgba(99, 102, 241, 0.8);
+  background-color: var(--app-primaria);
 }
 
 .app-sidebar .titulo-secao {
@@ -198,37 +209,33 @@
 }
 
 .login-marca {
-  position: relative;
-  overflow: hidden;
-  flex: 0 0 44%;
+  flex: 0 0 40%;
+  max-width: 520px;
   padding: 3rem;
-  color: #e0e7ff;
-  background:
-    radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.14), transparent 40%),
-    radial-gradient(circle at 85% 90%, rgba(139, 92, 246, 0.55), transparent 45%),
-    linear-gradient(150deg, #4338ca 0%, #4f46e5 45%, #6d28d9 100%);
+  color: var(--app-sidebar-cor);
+  background-color: var(--app-sidebar-bg);
+  border-right: 1px solid var(--app-sidebar-borda);
 }
 
 .login-marca h2 {
-  color: #fff;
-  font-size: 2.25rem;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  max-width: 22ch;
+  color: var(--app-sidebar-cor-hover);
+  font-size: 1.75rem;
+  line-height: 1.25;
 }
 
-.login-marca .app-marca-icone {
-  background: rgba(255, 255, 255, 0.16);
-  box-shadow: none;
-}
-
-.login-beneficio .bi {
-  color: #a5b4fc;
+.login-semestre {
+  color: var(--app-sidebar-destaque);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .login-aviso {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.08);
+  padding-top: 1.25rem;
+  color: var(--app-sidebar-titulo);
+  border-top: 1px solid var(--app-sidebar-borda);
 }
 
 .login-formulario {

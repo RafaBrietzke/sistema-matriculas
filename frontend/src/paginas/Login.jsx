@@ -6,17 +6,12 @@ import { useNotificacao } from '../contexto/notificacao';
 import { rotaInicial, useSessao } from '../contexto/sessao';
 import { useBuscaDados } from '../hooks/useBuscaDados';
 import AlertaErro from '../componentes/AlertaErro';
+import Assinatura from '../componentes/Assinatura';
 import Avatar from '../componentes/Avatar';
 import BotaoTema from '../componentes/BotaoTema';
 import EstadoVazio from '../componentes/EstadoVazio';
 import FormNovaMatricula from '../componentes/FormNovaMatricula';
 import { EsqueletoLista } from '../componentes/Esqueleto';
-
-const beneficios = [
-  'Oferta de turmas com controle de carga dos professores',
-  'Validação automática de pré-requisitos e vagas',
-  'Grade horária visual, sem choque de horários',
-];
 
 export default function Login() {
   const { sessao, entrar } = useSessao();
@@ -47,32 +42,20 @@ export default function Login() {
           <span className="app-marca-icone">
             <i className="bi bi-mortarboard-fill" aria-hidden="true" />
           </span>
-          MatrículaWeb
+          MatrículaFácil
         </div>
 
         <div className="my-auto py-5">
-          <span className="badge rounded-pill text-bg-light bg-opacity-10 mb-3">Semestre {SEMESTRE_ATUAL}</span>
-          <h2 className="fw-bold mb-3">Matrículas organizadas, sem choque de horário.</h2>
-          <p className="fs-5 mb-4 opacity-75">
-            A instituição monta a oferta de turmas e os alunos se matriculam com todas as regras verificadas na hora.
+          <p className="login-semestre mb-2">Semestre {SEMESTRE_ATUAL}</p>
+          <h2 className="mb-3">Oferta de turmas e matrículas do semestre.</h2>
+          <p className="mb-0">
+            Secretaria e alunos no mesmo sistema, com horários, pré-requisitos e vagas conferidos na matrícula.
           </p>
-          <ul className="list-unstyled d-grid gap-3 mb-0">
-            {beneficios.map((beneficio) => (
-              <li key={beneficio} className="login-beneficio d-flex gap-2">
-                <i className="bi bi-check2-circle fs-5" aria-hidden="true" />
-                {beneficio}
-              </li>
-            ))}
-          </ul>
         </div>
 
-        <div className="login-aviso d-flex gap-2 p-3 small">
-          <i className="bi bi-info-circle" aria-hidden="true" />
-          <span>
-            <strong className="text-white">Ambiente de demonstração.</strong> O login é simulado: escolha um perfil para
-            entrar, sem senha.
-          </span>
-        </div>
+        <p className="login-aviso small mb-0">
+          Ambiente de demonstração. O login é simulado: escolha um perfil para entrar, sem senha.
+        </p>
       </section>
 
       {/* Coluna do formulário */}
@@ -82,14 +65,14 @@ export default function Login() {
             <span className="app-marca-icone">
               <i className="bi bi-mortarboard-fill" aria-hidden="true" />
             </span>
-            MatrículaWeb
+            MatrículaFácil
           </div>
           <BotaoTema className="ms-auto" />
         </div>
 
         <div className="login-caixa py-4">
-          <h1 className="h3 mb-1">Acessar o sistema</h1>
-          <p className="text-body-secondary mb-4">Escolha com qual perfil você quer entrar.</p>
+          <h1 className="h4 mb-1">Entrar</h1>
+          <p className="text-body-secondary mb-4">Escolha o perfil de acesso.</p>
 
           <ul className="nav nav-pills nav-fill abas-segmentadas mb-4" role="tablist">
             {[
@@ -218,9 +201,7 @@ export default function Login() {
           )}
         </div>
 
-        <p className="text-center texto-pequeno text-body-secondary mb-0">
-          Desafio de Programação Front-End · UNISINOS
-        </p>
+        <Assinatura className="text-center" />
       </section>
     </div>
   );

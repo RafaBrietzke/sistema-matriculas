@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useSessao } from '../contexto/sessao';
 import BarraLateral from './BarraLateral';
 import BarraSuperior from './BarraSuperior';
+import Assinatura from './Assinatura';
 
 
 export default function LayoutApp() {
@@ -17,6 +18,7 @@ export default function LayoutApp() {
         <main className="app-conteudo">
           <Outlet />
         </main>
+        <Assinatura className="app-rodape nao-imprimir" />
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ const base = `http://localhost:${servidor.address().port}/api`;
 after(() => servidor.close());
 
 beforeEach(async () => {
-  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculaweb-cursos-'));
+  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculafacil-cursos-'));
   process.env.DB_ARQUIVO = path.join(pasta, 'db.json');
   await copyFile(new URL('../data/seed.json', import.meta.url), process.env.DB_ARQUIVO);
 });

@@ -8,7 +8,7 @@ import { garantirDb, lerDb, salvarDb, proximoId } from '../src/db.js';
 const seed = { disciplinas: [{ id: 1, nome: 'Algoritmos' }], professores: [], alunos: [], turmas: [] };
 
 beforeEach(async () => {
-  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculaweb-'));
+  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculafacil-'));
   process.env.SEED_ARQUIVO = path.join(pasta, 'seed.json');
   process.env.DB_ARQUIVO = path.join(pasta, 'db.json');
   await writeFile(process.env.SEED_ARQUIVO, JSON.stringify(seed));

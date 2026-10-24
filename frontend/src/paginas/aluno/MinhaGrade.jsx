@@ -61,7 +61,7 @@ export default function MinhaGrade() {
           <div>
             <p className="fs-4 fw-bold mb-0">
               <i className="bi bi-mortarboard-fill me-2" aria-hidden="true" />
-              MatrículaWeb
+              MatrículaFácil
             </p>
             <p className="mb-0">Comprovante de matrícula · Semestre {configuracoes.semestreAtual}</p>
           </div>
@@ -148,7 +148,7 @@ export default function MinhaGrade() {
             </div>
           </div>
 
-          <p className="so-impressao small mt-4 mb-0">Documento gerado pelo MatrículaWeb · ambiente de demonstração.</p>
+          <p className="so-impressao small mt-4 mb-0">Documento gerado pelo MatrículaFácil · ambiente de demonstração · desenvolvido por Rafaela Brietzke.</p>
         </>
       )}
     </>

@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Sistema de atendimento e matrículas" />
-    <title>MatrículaWeb</title>
+    <title>MatrículaFácil</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
       (function () {
         var tema;
         try {
-          tema = localStorage.getItem('matriculaweb:tema');
+          tema = localStorage.getItem('matriculafacil:tema');
         } catch (e) {}
         if (tema !== 'claro' && tema !== 'escuro') {
           tema = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';

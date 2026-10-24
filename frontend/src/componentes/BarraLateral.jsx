@@ -27,7 +27,7 @@ export default function BarraLateral({ perfil, aberta, aoFechar }) {
                 <span className="app-marca-icone">
                   <i className="bi bi-mortarboard-fill" aria-hidden="true" />
                 </span>
-                MatrículaWeb
+                MatrículaFácil
               </Link>
               <button type="button" className="btn-close btn-close-white d-lg-none" aria-label="Fechar menu" onClick={aoFechar} />
             </div>

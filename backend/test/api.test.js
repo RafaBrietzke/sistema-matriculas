@@ -17,7 +17,7 @@ let servidor;
 let base;
 
 before(async () => {
-  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculaweb-api-'));
+  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculafacil-api-'));
   process.env.DB_ARQUIVO = path.join(pasta, 'db.json');
   await writeFile(process.env.DB_ARQUIVO, JSON.stringify(dados));
   servidor = criarApp().listen(0);

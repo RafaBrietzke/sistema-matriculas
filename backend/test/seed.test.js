@@ -85,7 +85,7 @@ test('matrizes do seed são coerentes com os pré-requisitos e as matrículas', 
 });
 
 test('npm run seed recria o db.json a partir do seed', async () => {
-  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculaweb-seed-'));
+  const pasta = await mkdtemp(path.join(tmpdir(), 'matriculafacil-seed-'));
   const destino = path.join(pasta, 'db.json');
   await writeFile(destino, '{"alterado": true}');
 

@@ -1,8 +1,8 @@
-# MatrículaWeb — Sistema de Atendimento e Matrículas
+# MatrículaFácil — Sistema de Atendimento e Matrículas
 
 Desafio da Atividade Acadêmica de Programação Front-End (UNISINOS, ADS).
 
-O MatrículaWeb é uma aplicação web em que a **instituição** monta a oferta de turmas (disciplina + professor + horários) e os **alunos** se matriculam nelas. O sistema valida choque de horário, pré-requisitos, vagas e a carga dos professores.
+O MatrículaFácil é uma aplicação web em que a **instituição** monta a oferta de turmas (disciplina + professor + horários) e os **alunos** se matriculam nelas. O sistema valida choque de horário, pré-requisitos, vagas e a carga dos professores.
 
 ## Tecnologias
 

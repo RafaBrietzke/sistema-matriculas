@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const CHAVE_TEMA = 'matriculaweb:tema';
+const CHAVE_TEMA = 'matriculafacil:tema';
 
 function temaAtual() {
   return document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'escuro' : 'claro';
