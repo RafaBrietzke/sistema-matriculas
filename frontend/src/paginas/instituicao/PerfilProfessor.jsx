@@ -5,8 +5,10 @@ import { SEMESTRE_ATUAL } from '../../constantes';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
 import { corDaDisciplina } from '../../utilitarios/cores';
 import { cargaDoProfessor, percentual, plural } from '../../utilitarios/indicadores';
+import { cursosDaDisciplina } from '../../utilitarios/disciplinas';
 import AlertaErro from '../../componentes/AlertaErro';
 import Avatar from '../../componentes/Avatar';
+import BadgesCursos from '../../componentes/BadgesCursos';
 import BarraUso from '../../componentes/BarraUso';
 import CartaoIndicador from '../../componentes/CartaoIndicador';
 import EstadoVazio from '../../componentes/EstadoVazio';
@@ -17,8 +19,13 @@ import PainelLateral from '../../componentes/PainelLateral';
 import { FormularioProfessor } from './Professores';
 
 async function buscarDados() {
-  const [professores, turmas, disciplinas] = await Promise.all([listar('professores'), listar('turmas'), listar('disciplinas')]);
-  return { professores, turmas, disciplinas };
+  const [professores, turmas, disciplinas, cursos] = await Promise.all([
+    listar('professores'),
+    listar('turmas'),
+    listar('disciplinas'),
+    listar('cursos'),
+  ]);
+  return { professores, turmas, disciplinas, cursos };
 }
 
 function VoltarPara() {
@@ -45,7 +52,7 @@ export default function PerfilProfessor() {
   }
   if (erro) return <AlertaErro mensagem={erro} aoTentarNovamente={recarregar} />;
 
-  const { professores, turmas, disciplinas } = dados;
+  const { professores, turmas, disciplinas, cursos } = dados;
   const professor = professores.find((p) => p.id === Number(id));
   if (!professor) {
     return (
@@ -63,6 +70,7 @@ export default function PerfilProfessor() {
   const carga = cargaDoProfessor(professor.id, turmas);
   const alunosAtendidos = minhasTurmas.reduce((soma, t) => soma + t.alunos.length, 0);
   const disciplinasDistintas = new Set(minhasTurmas.map((t) => t.disciplinaId)).size;
+  const cursosAtendidos = cursos.filter((c) => minhasTurmas.some((t) => c.matriz.some((m) => m.disciplinaId === t.disciplinaId)));
   const eventos = minhasTurmas.map((t) => ({
     id: t.id,
     horarios: t.horarios,
@@ -87,10 +95,16 @@ export default function PerfilProfessor() {
         <Avatar nome={professor.nome} tamanho={64} />
         <div className="me-auto">
           <h1 className="h3 mb-1">{professor.nome}</h1>
-          <p className="text-body-secondary mb-0">
+          <p className="text-body-secondary mb-1">
             <i className="bi bi-briefcase me-1" aria-hidden="true" />
             {professor.area}
           </p>
+          {minhasTurmas.length > 0 && (
+            <p className="small mb-0 d-flex flex-wrap align-items-center gap-2">
+              <span className="text-body-secondary">Cursos atendidos:</span>
+              <BadgesCursos cursos={cursosAtendidos} />
+            </p>
+          )}
         </div>
         <div className="d-flex gap-2">
           <button type="button" className="btn btn-neutro" onClick={() => setEditando(true)}>
@@ -140,6 +154,7 @@ export default function PerfilProfessor() {
               <thead>
                 <tr className="texto-pequeno text-body-secondary">
                   <th scope="col" className="ps-3">Turma</th>
+                  <th scope="col">Cursos</th>
                   <th scope="col">Horários</th>
                   <th scope="col" style={{ minWidth: 150 }}>Ocupação</th>
                   <th scope="col" className="text-end pe-3">Ações</th>
@@ -155,6 +170,7 @@ export default function PerfilProfessor() {
                       </span>
                       <span className="d-block small text-body-secondary">{disciplinaPorId(t.disciplinaId)?.nome}</span>
                     </td>
+                    <td><BadgesCursos cursos={cursosDaDisciplina(t.disciplinaId, cursos)} /></td>
                     <td><ListaHorarios horarios={t.horarios} /></td>
                     <td><BarraUso valor={t.alunos.length} maximo={t.vagas} detalhe={`${t.alunos.length}/${t.vagas} vagas`} /></td>
                     <td className="text-end pe-3">

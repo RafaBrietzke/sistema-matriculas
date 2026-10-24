@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { buscarOfertasDoAluno, listar } from '../../api/cliente';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
 import { percentual, plural } from '../../utilitarios/indicadores';
+import { etapaNoCurso } from '../../utilitarios/disciplinas';
 import AlertaErro from '../../componentes/AlertaErro';
 import Avatar from '../../componentes/Avatar';
 import CartaoIndicador from '../../componentes/CartaoIndicador';
@@ -70,24 +71,29 @@ export default function PerfilAluno() {
     );
   }
 
+  const curso = cursos.find((c) => c.id === aluno.cursoId);
   const nomeDe = (disciplinaId) => disciplinas.find((d) => d.id === disciplinaId)?.nome;
+  const etapaDe = (disciplinaId) => etapaNoCurso(curso, disciplinaId);
   const porCodigo = (a, b) => a.codigo.localeCompare(b.codigo);
+  const porEtapa = (a, b) => (etapaDe(a.id) ?? 99) - (etapaDe(b.id) ?? 99) || porCodigo(a, b);
 
-  const concluidas = disciplinas.filter((d) => aluno.aprovadas.includes(d.id)).sort(porCodigo);
+  const matriz = disciplinas.filter((d) => etapaDe(d.id) !== null);
+  const concluidas = disciplinas.filter((d) => aluno.aprovadas.includes(d.id)).sort(porEtapa);
+  const concluidasNaMatriz = concluidas.filter((d) => etapaDe(d.id) !== null);
   const emCurso = ofertas.filter((o) => o.matriculado).sort(porCodigo);
   const idsEmCurso = emCurso.map((o) => o.disciplina.id);
-  const faltam = disciplinas
+  const faltam = matriz
     .filter((d) => !aluno.aprovadas.includes(d.id) && !idsEmCurso.includes(d.id))
-    .sort(porCodigo)
+    .sort(porEtapa)
     .map((d) => ({
       ...d,
       faltando: d.preRequisitos.filter((p) => !aluno.aprovadas.includes(p)).map(nomeDe),
       turmas: ofertas.filter((o) => o.disciplina.id === d.id).map((o) => o.codigo),
     }));
 
-  const progresso = percentual(concluidas.length, disciplinas.length);
-  const creditosConcluidos = concluidas.reduce((soma, d) => soma + d.creditos, 0);
-  const creditosDoCurso = disciplinas.reduce((soma, d) => soma + d.creditos, 0);
+  const progresso = percentual(concluidasNaMatriz.length, matriz.length);
+  const creditosConcluidos = concluidasNaMatriz.reduce((soma, d) => soma + d.creditos, 0);
+  const creditosDoCurso = matriz.reduce((soma, d) => soma + d.creditos, 0);
 
   return (
     <>
@@ -98,7 +104,8 @@ export default function PerfilAluno() {
         <div className="me-auto">
           <h1 className="h3 mb-1">{aluno.nome}</h1>
           <p className="text-body-secondary mb-0">
-            Matrícula {aluno.matricula} · {aluno.curso}
+            Matrícula {aluno.matricula} ·{' '}
+            <span className="badge rounded-pill bg-info-subtle text-info-emphasis">{curso?.sigla}</span> {curso?.nome}
           </p>
         </div>
         <button type="button" className="btn btn-neutro" onClick={() => setEditando(true)}>
@@ -114,7 +121,7 @@ export default function PerfilAluno() {
             cor="success"
             rotulo="Progresso no curso"
             valor={`${progresso}%`}
-            detalhe={`${concluidas.length} de ${disciplinas.length} disciplinas concluídas`}
+            detalhe={`${concluidasNaMatriz.length} de ${matriz.length} disciplinas da matriz`}
           >
             <div className="progress mt-2" role="progressbar" aria-label="Progresso no curso" aria-valuenow={progresso} aria-valuemin="0" aria-valuemax="100">
               <div className="progress-bar bg-success" style={{ width: `${progresso}%` }} />
@@ -146,6 +153,7 @@ export default function PerfilAluno() {
                     <i className="bi bi-check2 text-success" aria-hidden="true" />
                     <span className="small flex-grow-1">
                       <span className="fw-semibold">{d.codigo}</span> · {d.nome}
+                      {etapaDe(d.id) === null && <span className="badge rounded-pill bg-warning-subtle text-warning-emphasis ms-1">fora da matriz</span>}
                     </span>
                     <span className="texto-pequeno text-body-secondary text-nowrap">{d.creditos} cr</span>
                   </li>
@@ -185,6 +193,7 @@ export default function PerfilAluno() {
                   <li key={d.id} className="list-group-item">
                     <div className="d-flex gap-2 align-items-start">
                       <span className="small flex-grow-1">
+                        <span className="texto-pequeno text-body-secondary d-block">{etapaDe(d.id)}ª etapa</span>
                         <span className="fw-semibold">{d.codigo}</span> · {d.nome}
                       </span>
                       {d.faltando.length === 0 && <span className="badge rounded-pill bg-success-subtle text-success-emphasis">Pode cursar</span>}

@@ -28,6 +28,7 @@ export default function TurmasOfertadas() {
   const [dia, setDia] = useState('');
   const [turno, setTurno] = useState('');
   const [soDisponiveis, setSoDisponiveis] = useState(false);
+  const [soMeuCurso, setSoMeuCurso] = useState(true);
   const [escolhida, setEscolhida] = useState(null);
   const [processando, setProcessando] = useState(false);
 
@@ -55,7 +56,7 @@ export default function TurmasOfertadas() {
   }
   if (erro) return <AlertaErro mensagem={erro} aoTentarNovamente={recarregar} />;
 
-  const { configuracoes, creditosMatriculados, ofertas } = dados;
+  const { curso, configuracoes, creditosMatriculados, ofertas } = dados;
   const termo = busca.trim().toLowerCase();
   const filtradas = ofertas
     .filter(
@@ -63,16 +64,17 @@ export default function TurmasOfertadas() {
         `${o.codigo} ${o.disciplina.nome} ${o.professor.nome}`.toLowerCase().includes(termo) &&
         (!dia || o.horarios.some((h) => h[0] === dia)) &&
         (!turno || o.horarios.some((h) => h[1] === turno)) &&
-        (!soDisponiveis || (!o.matriculado && o.bloqueios.length === 0)),
+        (!soDisponiveis || (!o.matriculado && o.bloqueios.length === 0)) &&
+        (!soMeuCurso || o.naMatriz || o.matriculado),
     )
-    .sort((a, b) => a.codigo.localeCompare(b.codigo));
+    .sort((a, b) => (a.etapa ?? 99) - (b.etapa ?? 99) || a.codigo.localeCompare(b.codigo));
   const disponiveis = ofertas.filter((o) => !o.matriculado && o.bloqueios.length === 0).length;
 
   return (
     <>
       <CabecalhoPagina
         titulo="Turmas ofertadas"
-        subtitulo={`Semestre ${configuracoes.semestreAtual} · ${plural(disponiveis, 'turma disponível', 'turmas disponíveis')} para você`}
+        subtitulo={`${curso?.nome ?? 'Sem curso'} · Semestre ${configuracoes.semestreAtual} · ${plural(disponiveis, 'turma disponível', 'turmas disponíveis')} para você`}
         acoes={
           <Link to="/aluno/matriculas" className="btn btn-neutro">
             <i className="bi bi-check2-square me-2" aria-hidden="true" />
@@ -128,7 +130,18 @@ export default function TurmasOfertadas() {
                 ))}
               </select>
             </div>
-            <div className="col-md-3 d-flex align-items-center">
+            <div className="col-md-3 d-grid gap-1 align-content-center">
+              <div className="form-check form-switch mb-0">
+                <input
+                  id="so-meu-curso"
+                  className="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  checked={soMeuCurso}
+                  onChange={(e) => setSoMeuCurso(e.target.checked)}
+                />
+                <label className="form-check-label small" htmlFor="so-meu-curso">Só do meu curso</label>
+              </div>
               <div className="form-check form-switch mb-0">
                 <input
                   id="so-disponiveis"
@@ -204,7 +217,9 @@ function CartaoOferta({ oferta, aoMatricular }) {
       <div className="card-body d-flex flex-column gap-3">
         <div className="d-flex justify-content-between align-items-start gap-2">
           <div className="min-w-0">
-            <span className="texto-pequeno fw-semibold text-body-secondary">{oferta.codigo}</span>
+            <span className="texto-pequeno fw-semibold text-body-secondary">
+              {oferta.codigo} · {oferta.naMatriz ? `${oferta.etapa}ª etapa` : 'fora do seu curso'}
+            </span>
             <h2 className="h6 mb-0">{oferta.disciplina.nome}</h2>
           </div>
           <span className={`badge rounded-pill ${status.classe}`}>

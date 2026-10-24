@@ -18,13 +18,14 @@ const atalhos = [
 ];
 
 async function buscarDadosDoAluno(id) {
-  const [aluno, turmas, disciplinas, professores] = await Promise.all([
+  const [aluno, turmas, disciplinas, professores, cursos] = await Promise.all([
     buscar('alunos', id),
     listar('turmas'),
     listar('disciplinas'),
     listar('professores'),
+    listar('cursos'),
   ]);
-  return { aluno, turmas, disciplinas, professores };
+  return { aluno, turmas, disciplinas, professores, curso: cursos.find((c) => c.id === aluno.cursoId) };
 }
 
 export default function InicioAluno() {
@@ -47,13 +48,15 @@ export default function InicioAluno() {
   }
   if (erro) return <AlertaErro mensagem={erro} aoTentarNovamente={recarregar} />;
 
-  const { aluno, turmas, disciplinas, professores } = dados;
+  const { aluno, turmas, disciplinas, professores, curso } = dados;
   const disciplinaPorId = (id) => disciplinas.find((d) => d.id === id);
   const professorPorId = (id) => professores.find((p) => p.id === id);
 
   const minhasTurmas = turmas.filter((t) => t.alunos.includes(aluno.id));
   const creditos = minhasTurmas.reduce((soma, t) => soma + (disciplinaPorId(t.disciplinaId)?.creditos ?? 0), 0);
-  const progresso = percentual(aluno.aprovadas.length, disciplinas.length);
+  const totalMatriz = curso?.matriz.length ?? 0;
+  const aprovadasNaMatriz = aluno.aprovadas.filter((id) => curso?.matriz.some((m) => m.disciplinaId === id)).length;
+  const progresso = percentual(aprovadasNaMatriz, totalMatriz);
 
   return (
     <>
@@ -62,7 +65,7 @@ export default function InicioAluno() {
         <div>
           <h1 className="h3 mb-1">Olá, {aluno.nome.split(' ')[0]}!</h1>
           <p className="text-body-secondary mb-0">
-            {aluno.curso} · <span className="text-nowrap">Matrícula {aluno.matricula}</span>
+            {curso?.nome} · <span className="text-nowrap">Matrícula {aluno.matricula}</span>
           </p>
         </div>
       </div>
@@ -85,7 +88,7 @@ export default function InicioAluno() {
             cor="success"
             rotulo="Progresso no curso"
             valor={`${progresso}%`}
-            detalhe={`${aluno.aprovadas.length} de ${disciplinas.length} disciplinas aprovadas`}
+            detalhe={`${aprovadasNaMatriz} de ${totalMatriz} disciplinas da matriz`}
           >
             <div className="progress mt-2" role="progressbar" aria-label="Progresso no curso" aria-valuenow={progresso} aria-valuemin="0" aria-valuemax="100">
               <div className="progress-bar bg-success" style={{ width: `${progresso}%` }} />

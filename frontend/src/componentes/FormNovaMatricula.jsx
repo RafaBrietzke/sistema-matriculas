@@ -23,7 +23,7 @@ export default function FormNovaMatricula({ aoCriar, aoCancelar }) {
     setSalvando(true);
     setErroEnvio(null);
     try {
-      const aluno = await criar('alunos', { nome, curso });
+      const aluno = await criar('alunos', { nome, cursoId: Number(curso) });
       aoCriar(aluno);
     } catch (e) {
       setErroEnvio(e.message);
@@ -80,8 +80,8 @@ export default function FormNovaMatricula({ aoCriar, aoCancelar }) {
           >
             <option value="">{cursos ? 'Selecione o curso' : 'Carregando cursos…'}</option>
             {cursos?.map((item) => (
-              <option key={item.id} value={item.nome}>
-                {item.nome}
+              <option key={item.id} value={item.id}>
+                {item.sigla} — {item.nome}
               </option>
             ))}
           </select>

@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { atualizar, criar, listar } from '../../api/cliente';
 import { useNotificacao } from '../../contexto/notificacao';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
-import { dependeDe } from '../../utilitarios/disciplinas';
+import { cursosDaDisciplina, dependeDe } from '../../utilitarios/disciplinas';
 import { plural } from '../../utilitarios/indicadores';
 import AlertaErro from '../../componentes/AlertaErro';
+import BadgesCursos from '../../componentes/BadgesCursos';
 import CabecalhoPagina from '../../componentes/CabecalhoPagina';
 import ChecklistDisciplinas from '../../componentes/ChecklistDisciplinas';
 import EstadoVazio from '../../componentes/EstadoVazio';
@@ -13,13 +14,14 @@ import ModalExclusao from '../../componentes/ModalExclusao';
 import PainelLateral from '../../componentes/PainelLateral';
 
 async function buscarDados() {
-  const [disciplinas, turmas] = await Promise.all([listar('disciplinas'), listar('turmas')]);
-  return { disciplinas, turmas };
+  const [disciplinas, turmas, cursos] = await Promise.all([listar('disciplinas'), listar('turmas'), listar('cursos')]);
+  return { disciplinas, turmas, cursos };
 }
 
 export default function Disciplinas() {
   const { dados, carregando, erro, recarregar } = useBuscaDados(buscarDados);
   const [busca, setBusca] = useState('');
+  const [cursoId, setCursoId] = useState('');
   const [editando, setEditando] = useState(null);
   const [excluindo, setExcluindo] = useState(null);
 
@@ -40,11 +42,12 @@ export default function Disciplinas() {
   }
   if (erro) return <AlertaErro mensagem={erro} aoTentarNovamente={recarregar} />;
 
-  const { disciplinas, turmas } = dados;
+  const { disciplinas, turmas, cursos } = dados;
   const codigoDe = (id) => disciplinas.find((d) => d.id === id)?.codigo;
   const termo = busca.trim().toLowerCase();
   const filtradas = disciplinas
     .filter((d) => `${d.codigo} ${d.nome}`.toLowerCase().includes(termo))
+    .filter((d) => !cursoId || cursosDaDisciplina(d.id, cursos).some((c) => c.id === Number(cursoId)))
     .sort((a, b) => a.codigo.localeCompare(b.codigo));
 
   return (
@@ -52,15 +55,25 @@ export default function Disciplinas() {
       <CabecalhoPagina titulo="Disciplinas" subtitulo={`${plural(disciplinas.length, 'disciplina cadastrada', 'disciplinas cadastradas')}`} acoes={acoes} />
 
       <div className="card">
-        <div className="card-body border-bottom">
-          <input
-            type="search"
-            className="form-control"
-            placeholder="Buscar por código ou nome"
-            aria-label="Buscar disciplina"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-          />
+        <div className="card-body border-bottom row g-2 m-0">
+          <div className="col-md-7 ps-md-0">
+            <input
+              type="search"
+              className="form-control"
+              placeholder="Buscar por código ou nome"
+              aria-label="Buscar disciplina"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+            />
+          </div>
+          <div className="col-md-5 pe-md-0">
+            <select className="form-select" aria-label="Filtrar por curso" value={cursoId} onChange={(e) => setCursoId(e.target.value)}>
+              <option value="">Todos os cursos</option>
+              {cursos.map((c) => (
+                <option key={c.id} value={c.id}>{c.sigla} — {c.nome}</option>
+              ))}
+            </select>
+          </div>
         </div>
         {filtradas.length === 0 ? (
           <EstadoVazio icone="bi-journal-x" titulo="Nenhuma disciplina encontrada" descricao="Ajuste a busca ou cadastre uma nova disciplina." />
@@ -70,6 +83,7 @@ export default function Disciplinas() {
               <thead>
                 <tr className="texto-pequeno text-body-secondary">
                   <th scope="col" className="ps-3">Disciplina</th>
+                  <th scope="col">Cursos</th>
                   <th scope="col" className="text-center">Créditos</th>
                   <th scope="col">Pré-requisitos</th>
                   <th scope="col" className="text-center">Turmas</th>
@@ -83,6 +97,7 @@ export default function Disciplinas() {
                       <span className="fw-semibold">{d.codigo}</span>
                       <span className="d-block small text-body-secondary">{d.nome}</span>
                     </td>
+                    <td><BadgesCursos cursos={cursosDaDisciplina(d.id, cursos)} /></td>
                     <td className="text-center">{d.creditos}</td>
                     <td>
                       {d.preRequisitos.length === 0 ? (
@@ -210,7 +225,7 @@ function FormularioDisciplina({ disciplina, disciplinas, temTurmas, aoSalvar, ao
 
         <div>
           <p className="form-label fw-medium mb-1">Pré-requisitos</p>
-          <p className="small text-body-secondary mb-2">Disciplinas que o aluno precisa ter aprovado antes de cursar esta.</p>
+          <p className="small text-body-secondary mb-2">Disciplinas que o aluno precisa ter aprovado antes de cursar esta. Os cursos e as etapas são definidos na tela Cursos.</p>
           <ChecklistDisciplinas
             disciplinas={disciplinas.filter((d) => d.id !== disciplina?.id)}
             selecionadas={form.preRequisitos}

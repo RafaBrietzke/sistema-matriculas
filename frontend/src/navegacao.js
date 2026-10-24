@@ -8,6 +8,7 @@ export const menus = {
     {
       secao: 'Cadastros',
       itens: [
+        { para: '/instituicao/cursos', texto: 'Cursos', icone: 'bi-diagram-3' },
         { para: '/instituicao/disciplinas', texto: 'Disciplinas', icone: 'bi-journal-bookmark' },
         { para: '/instituicao/professores', texto: 'Professores', icone: 'bi-person-badge' },
         { para: '/instituicao/alunos', texto: 'Alunos', icone: 'bi-mortarboard' },

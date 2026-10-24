@@ -58,3 +58,7 @@ export function salvarConfiguracoes(dados) {
 export function buscarOfertasDoAluno(alunoId) {
   return requisicao(`/alunos/${alunoId}/ofertas`);
 }
+
+export function salvarNaMatriz(cursoId, disciplinaId, etapa) {
+  return requisicao(`/cursos/${cursoId}/matriz/${disciplinaId}`, { method: 'PUT', body: JSON.stringify({ etapa }) });
+}

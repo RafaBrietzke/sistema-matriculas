@@ -6,7 +6,9 @@ import { useNotificacao } from '../../contexto/notificacao';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
 import { TURNOS } from '../../utilitarios/horarios';
 import { plural } from '../../utilitarios/indicadores';
+import { cursosDaDisciplina } from '../../utilitarios/disciplinas';
 import AlertaErro from '../../componentes/AlertaErro';
+import BadgesCursos from '../../componentes/BadgesCursos';
 import BarraUso from '../../componentes/BarraUso';
 import CabecalhoPagina from '../../componentes/CabecalhoPagina';
 import EstadoVazio from '../../componentes/EstadoVazio';
@@ -15,12 +17,13 @@ import ListaHorarios from '../../componentes/ListaHorarios';
 import ModalConfirmacao from '../../componentes/ModalConfirmacao';
 
 async function buscarDados() {
-  const [turmas, disciplinas, professores] = await Promise.all([
+  const [turmas, disciplinas, professores, cursos] = await Promise.all([
     listar('turmas'),
     listar('disciplinas'),
     listar('professores'),
+    listar('cursos'),
   ]);
-  return { turmas, disciplinas, professores };
+  return { turmas, disciplinas, professores, cursos };
 }
 
 export default function Turmas() {
@@ -29,6 +32,7 @@ export default function Turmas() {
   const [busca, setBusca] = useState('');
   const [professorId, setProfessorId] = useState('');
   const [turno, setTurno] = useState('');
+  const [cursoId, setCursoId] = useState('');
   const [excluindo, setExcluindo] = useState(null);
   const [processando, setProcessando] = useState(false);
 
@@ -75,7 +79,8 @@ export default function Turmas() {
       return (
         texto.includes(termo) &&
         (!professorId || t.professorId === Number(professorId)) &&
-        (!turno || t.horarios.some((h) => h[1] === turno))
+        (!turno || t.horarios.some((h) => h[1] === turno)) &&
+        (!cursoId || cursosDaDisciplina(t.disciplinaId, dados.cursos).some((c) => c.id === Number(cursoId)))
       );
     })
     .sort((a, b) => a.codigo.localeCompare(b.codigo));
@@ -90,7 +95,15 @@ export default function Turmas() {
 
       <div className="card mb-3">
         <div className="card-body row g-2">
-          <div className="col-md-6">
+          <div className="col-md-3">
+            <select className="form-select" aria-label="Filtrar por curso" value={cursoId} onChange={(e) => setCursoId(e.target.value)}>
+              <option value="">Todos os cursos</option>
+              {dados.cursos.map((c) => (
+                <option key={c.id} value={c.id}>{c.sigla} — {c.nome}</option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-3">
             <div className="input-group">
               <span className="input-group-text bg-transparent">
                 <i className="bi bi-search" aria-hidden="true" />
@@ -153,7 +166,8 @@ export default function Turmas() {
                   <tr key={turma.id}>
                     <td className="ps-3">
                       <span className="fw-semibold">{turma.codigo}</span>
-                      <span className="d-block small text-body-secondary">{disciplinaPorId(turma.disciplinaId)?.nome}</span>
+                      <span className="d-block small text-body-secondary mb-1">{disciplinaPorId(turma.disciplinaId)?.nome}</span>
+                      <BadgesCursos cursos={cursosDaDisciplina(turma.disciplinaId, dados.cursos)} />
                     </td>
                     <td className="text-nowrap">
                       <Link to={`/instituicao/professores/${turma.professorId}`} className="link-nome">

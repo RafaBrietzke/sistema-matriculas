@@ -43,7 +43,7 @@ export default function MinhaGrade() {
   }
   if (erro) return <AlertaErro mensagem={erro} aoTentarNovamente={recarregar} />;
 
-  const { aluno, configuracoes, creditosMatriculados, ofertas } = dados;
+  const { aluno, curso, configuracoes, creditosMatriculados, ofertas } = dados;
   const matriculadas = ofertas.filter((o) => o.matriculado).sort((a, b) => a.horarios[0].localeCompare(b.horarios[0]));
   const eventos = matriculadas.map((o) => ({
     id: o.id,
@@ -70,7 +70,7 @@ export default function MinhaGrade() {
         <div className="d-flex flex-wrap gap-4 mt-3">
           <span>Aluno: <strong>{aluno.nome}</strong></span>
           <span>Matrícula: <strong>{aluno.matricula}</strong></span>
-          <span>Curso: <strong>{aluno.curso}</strong></span>
+          <span>Curso: <strong>{curso?.nome}</strong></span>
         </div>
       </div>
 

@@ -10,6 +10,8 @@ import Turmas from './paginas/instituicao/Turmas';
 import Disciplinas from './paginas/instituicao/Disciplinas';
 import Professores from './paginas/instituicao/Professores';
 import Alunos from './paginas/instituicao/Alunos';
+import Cursos from './paginas/instituicao/Cursos';
+import MatrizCurso from './paginas/instituicao/MatrizCurso';
 import PerfilProfessor from './paginas/instituicao/PerfilProfessor';
 import PerfilAluno from './paginas/instituicao/PerfilAluno';
 import FormularioTurma from './paginas/instituicao/FormularioTurma';
@@ -33,6 +35,8 @@ export default function App() {
       <Route path="instituicao" element={<RotaProtegida perfil="instituicao" />}>
         <Route element={<LayoutApp />}>
           <Route index element={<InicioInstituicao />} />
+          <Route path="cursos" element={<Cursos />} />
+          <Route path="cursos/:id" element={<MatrizCurso />} />
           <Route path="disciplinas" element={<Disciplinas />} />
           <Route path="professores" element={<Professores />} />
           <Route path="professores/:id" element={<PerfilProfessor />} />

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { etapaDa } from '../utilitarios/disciplinas';
 import { plural } from '../utilitarios/indicadores';
 
-export default function ChecklistDisciplinas({ disciplinas, selecionadas, aoAlterar, motivoBloqueio = () => null, agruparPorEtapa = false }) {
+// etapaDe(d) → número da etapa (ou null = fora da matriz); sem etapaDe, a lista não é agrupada.
+export default function ChecklistDisciplinas({ disciplinas, selecionadas, aoAlterar, motivoBloqueio = () => null, etapaDe }) {
   const [busca, setBusca] = useState('');
 
   function alternar(id) {
@@ -10,17 +10,20 @@ export default function ChecklistDisciplinas({ disciplinas, selecionadas, aoAlte
   }
 
   const termo = busca.trim().toLowerCase();
+  const ordem = (d) => etapaDe?.(d) ?? 99;
   const visiveis = disciplinas
     .filter((d) => `${d.codigo} ${d.nome}`.toLowerCase().includes(termo))
-    .sort((a, b) => a.codigo.localeCompare(b.codigo));
+    .sort((a, b) => ordem(a) - ordem(b) || a.codigo.localeCompare(b.codigo));
 
-  const grupos = agruparPorEtapa
-    ? Object.entries(
-        visiveis.reduce((porEtapa, d) => {
-          (porEtapa[etapaDa(d.codigo)] ??= []).push(d);
-          return porEtapa;
-        }, {}),
-      ).map(([etapa, lista]) => [`${etapa}ª etapa`, lista])
+  const grupos = etapaDe
+    ? visiveis.reduce((lista, d) => {
+        const etapa = etapaDe(d);
+        const titulo = etapa === null ? 'Fora da matriz do curso' : `${etapa}ª etapa`;
+        const grupo = lista.find(([t]) => t === titulo);
+        if (grupo) grupo[1].push(d);
+        else lista.push([titulo, [d]]);
+        return lista;
+      }, [])
     : [[null, visiveis]];
 
   return (

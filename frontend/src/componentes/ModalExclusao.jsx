@@ -5,7 +5,7 @@ import { useBuscaDados } from '../hooks/useBuscaDados';
 import ModalConfirmacao from './ModalConfirmacao';
 
 // Consulta se o registro está em uso antes de permitir a exclusão.
-export default function ModalExclusao({ item, recurso, aoFechar, aoExcluir }) {
+export default function ModalExclusao({ item, recurso, aoFechar, aoExcluir, verbo = 'Excluir', sucesso = (nome) => `${nome} excluído(a)` }) {
   const { notificar } = useNotificacao();
   const [processando, setProcessando] = useState(false);
   const { dados: uso, carregando, erro } = useBuscaDados(
@@ -17,7 +17,7 @@ export default function ModalExclusao({ item, recurso, aoFechar, aoExcluir }) {
     setProcessando(true);
     try {
       await remover(`/${recurso}/${item.id}`);
-      notificar({ tipo: 'sucesso', titulo: `${item.nome} excluído(a)` });
+      notificar({ tipo: 'sucesso', titulo: sucesso(item.nome) });
       aoExcluir();
     } catch (e) {
       notificar({ tipo: 'erro', titulo: 'Não foi possível excluir', mensagem: e.message });
@@ -30,15 +30,15 @@ export default function ModalExclusao({ item, recurso, aoFechar, aoExcluir }) {
   let mensagem = 'Verificando se o registro está em uso...';
   if (erro) mensagem = erro;
   else if (uso?.podeExcluir) mensagem = 'Esta ação não pode ser desfeita.';
-  else if (uso) mensagem = 'Não é possível excluir porque:';
+  else if (uso) mensagem = `Não é possível ${verbo.toLowerCase()} porque:`;
 
   return (
     <ModalConfirmacao
       aberto={Boolean(item)}
       icone="bi-trash"
-      titulo={`Excluir ${item?.nome}?`}
+      titulo={`${verbo} ${item?.nome}?`}
       mensagem={mensagem}
-      textoConfirmar="Excluir"
+      textoConfirmar={verbo}
       processando={processando}
       podeConfirmar={!carregando && Boolean(uso?.podeExcluir)}
       ocultarConfirmar={Boolean(uso && !uso.podeExcluir)}

@@ -5,6 +5,7 @@ import { SEMESTRE_ATUAL } from '../../constantes';
 import { useBuscaDados } from '../../hooks/useBuscaDados';
 import { corDaDisciplina } from '../../utilitarios/cores';
 import { cargaDoProfessor, plural } from '../../utilitarios/indicadores';
+import { cursosDaDisciplina } from '../../utilitarios/disciplinas';
 import AlertaErro from '../../componentes/AlertaErro';
 import BarraUso from '../../componentes/BarraUso';
 import CabecalhoPagina from '../../componentes/CabecalhoPagina';
@@ -12,12 +13,13 @@ import { EsqueletoTexto } from '../../componentes/Esqueleto';
 import GradeHoraria from '../../componentes/GradeHoraria';
 
 async function buscarDados() {
-  const [turmas, disciplinas, professores] = await Promise.all([
+  const [turmas, disciplinas, professores, cursos] = await Promise.all([
     listar('turmas'),
     listar('disciplinas'),
     listar('professores'),
+    listar('cursos'),
   ]);
-  return { turmas, disciplinas, professores };
+  return { turmas, disciplinas, professores, cursos };
 }
 
 export default function GradeGeral() {
@@ -25,6 +27,7 @@ export default function GradeGeral() {
   const { dados, carregando, erro, recarregar } = useBuscaDados(buscarDados);
   const [professorId, setProfessorId] = useState('');
   const [disciplinaId, setDisciplinaId] = useState('');
+  const [cursoId, setCursoId] = useState('');
 
   const acoes = (
     <Link to="/instituicao/turmas/nova" className="btn btn-primary">
@@ -45,13 +48,16 @@ export default function GradeGeral() {
   }
   if (erro) return <AlertaErro mensagem={erro} aoTentarNovamente={recarregar} />;
 
-  const { turmas, disciplinas, professores } = dados;
+  const { turmas, disciplinas, professores, cursos } = dados;
   const disciplinaPorId = (id) => disciplinas.find((d) => d.id === id);
   const professorPorId = (id) => professores.find((p) => p.id === id);
   const professor = professorPorId(Number(professorId));
 
   const filtradas = turmas.filter(
-    (t) => (!professorId || t.professorId === Number(professorId)) && (!disciplinaId || t.disciplinaId === Number(disciplinaId)),
+    (t) =>
+      (!professorId || t.professorId === Number(professorId)) &&
+      (!disciplinaId || t.disciplinaId === Number(disciplinaId)) &&
+      (!cursoId || cursosDaDisciplina(t.disciplinaId, cursos).some((c) => c.id === Number(cursoId))),
   );
   const eventos = filtradas.map((t) => ({
     id: t.id,
@@ -80,6 +86,14 @@ export default function GradeGeral() {
       <div className="card mb-3">
         <div className="card-body row g-3 align-items-center">
           <div className="col-sm-6 col-lg-4">
+            <select className="form-select" aria-label="Filtrar por curso" value={cursoId} onChange={(e) => setCursoId(e.target.value)}>
+              <option value="">Todos os cursos</option>
+              {cursos.map((c) => (
+                <option key={c.id} value={c.id}>{c.sigla} — {c.nome}</option>
+              ))}
+            </select>
+          </div>
+          <div className="col-sm-6 col-lg-4">
             <select className="form-select" aria-label="Filtrar por professor" value={professorId} onChange={(e) => setProfessorId(e.target.value)}>
               <option value="">Todos os professores</option>
               {professores.map((p) => (
@@ -96,7 +110,7 @@ export default function GradeGeral() {
             </select>
           </div>
           {professor && (
-            <div className="col-lg-4">
+            <div className="col-lg-12">
               <BarraUso
                 rotulo={`Carga de ${professor.nome}`}
                 valor={cargaDoProfessor(professor.id, turmas)}
