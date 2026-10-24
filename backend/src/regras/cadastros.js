@@ -1,6 +1,7 @@
 import { ErroHttp } from '../middlewares/erros.js';
 import { cargaDoProfessor, turmasDoSemestre } from './oferta.js';
 import { plural } from './textos.js';
+import { cursosDaDisciplina } from './matriz.js';
 
 const CODIGO_DISCIPLINA = /^[A-Z]{2,4}\d{3}$/;
 
@@ -71,6 +72,9 @@ export function usoDaDisciplina(id, db) {
 
   const alunos = db.alunos.filter((a) => a.aprovadas.includes(id)).length;
   if (alunos) motivos.push(`Está no histórico de ${plural(alunos, 'aluno', 'alunos')}`);
+
+  const cursos = cursosDaDisciplina(id, db).map((c) => c.sigla);
+  if (cursos.length) motivos.push(`Está na matriz de ${cursos.join(', ')}`);
 
   return { podeExcluir: motivos.length === 0, motivos };
 }

@@ -49,7 +49,7 @@ test('disciplinas: criar, editar, impedir ciclo e excluir', async () => {
 test('disciplinas: exclusão bloqueada mostra os motivos', async () => {
   const uso = await chamar('GET', '/disciplinas/1/uso');
   assert.equal(uso.corpo.podeExcluir, false);
-  assert.equal(uso.corpo.motivos.length, 3);
+  assert.equal(uso.corpo.motivos.length, 4);
 
   const exclusao = await chamar('DELETE', '/disciplinas/1');
   assert.equal(exclusao.status, 409);
@@ -63,7 +63,7 @@ test('professores: criar, editar com carga mínima e excluir', async () => {
 
   const ana = await chamar('PUT', '/professores/1', { nome: 'Ana Souza', area: 'Programação', cargaMaxima: 2 });
   assert.equal(ana.status, 409);
-  assert.match(ana.corpo.erro, /3 horários/);
+  assert.match(ana.corpo.erro, /4 horários/);
   assert.equal((await chamar('PUT', '/professores/1', { nome: 'Ana Souza', area: 'Programação', cargaMaxima: 8 })).corpo.cargaMaxima, 8);
 
   assert.equal((await chamar('DELETE', '/professores/1')).status, 409);
@@ -71,19 +71,18 @@ test('professores: criar, editar com carga mínima e excluir', async () => {
 });
 
 test('alunos: cadastrar com histórico, editar e excluir', async () => {
-  const curso = 'Análise e Desenvolvimento de Sistemas';
-  const novo = await chamar('POST', '/alunos', { nome: 'Helena Costa', curso, aprovadas: [1, 2] });
+  const novo = await chamar('POST', '/alunos', { nome: 'Helena Costa', cursoId: 1, aprovadas: [1, 2] });
   assert.equal(novo.status, 201);
   assert.deepEqual(novo.corpo.aprovadas, [1, 2]);
 
-  const incoerente = await chamar('PUT', `/alunos/${novo.corpo.id}`, { nome: 'Helena Costa', curso, aprovadas: [9] });
+  const incoerente = await chamar('PUT', `/alunos/${novo.corpo.id}`, { nome: 'Helena Costa', cursoId: 1, aprovadas: [9] });
   assert.equal(incoerente.status, 409);
   assert.match(incoerente.corpo.erro, /Banco de Dados II/);
 
-  const editado = await chamar('PUT', `/alunos/${novo.corpo.id}`, { nome: 'Helena C. Costa', curso: 'Jogos Digitais', aprovadas: [1, 2, 7], matricula: '0000000' });
+  const editado = await chamar('PUT', `/alunos/${novo.corpo.id}`, { nome: 'Helena C. Costa', cursoId: 4, aprovadas: [1, 2, 7], matricula: '0000000' });
   assert.equal(editado.status, 200);
   assert.equal(editado.corpo.matricula, novo.corpo.matricula);
-  assert.equal(editado.corpo.curso, 'Jogos Digitais');
+  assert.equal(editado.corpo.cursoId, 4);
 
   assert.equal((await chamar('DELETE', '/alunos/2')).status, 409);
   assert.equal((await chamar('DELETE', `/alunos/${novo.corpo.id}`)).status, 204);

@@ -86,7 +86,7 @@ test('GET /api/alunos/:id/ofertas devolve ofertas com bloqueios', async () => {
   const { status, corpo } = await chamar('GET', '/alunos/2/ofertas');
   assert.equal(status, 200);
   assert.equal(corpo.creditosMatriculados, 8);
-  assert.equal(corpo.ofertas.length, 9);
+  assert.equal(corpo.ofertas.length, 10);
   assert.equal(corpo.ofertas.find((o) => o.codigo === 'ADS201-A').bloqueios[0].tipo, 'choque');
   assert.equal((await chamar('GET', '/alunos/999/ofertas')).status, 404);
 });

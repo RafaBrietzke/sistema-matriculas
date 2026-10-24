@@ -18,14 +18,14 @@ export function gerarMatricula(alunos, ano = new Date().getFullYear()) {
 
 function dadosDoAluno(corpo, db) {
   const nome = corpo?.nome?.trim() ?? '';
-  const curso = corpo?.curso?.trim() ?? '';
+  const cursoId = Number(corpo?.cursoId);
   if (nome.length < 3) {
     throw new ErroHttp(400, 'Informe o nome completo do aluno (mínimo de 3 letras)');
   }
-  if (!db.cursos.some((item) => item.nome === curso)) {
+  if (!db.cursos.some((item) => item.id === cursoId)) {
     throw new ErroHttp(400, 'Selecione um dos cursos cadastrados na instituição');
   }
-  return { nome, curso, aprovadas: validarHistorico(corpo?.aprovadas ?? [], db) };
+  return { nome, cursoId, aprovadas: validarHistorico(corpo?.aprovadas ?? [], db) };
 }
 
 export function criarRotasAlunos() {

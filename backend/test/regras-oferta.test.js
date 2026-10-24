@@ -41,8 +41,8 @@ test('normalizarOferta recusa campos inválidos com 400', () => {
 
 test('cargaDoProfessor soma os horários e pode ignorar uma turma', () => {
   const db = novoDb();
-  assert.equal(cargaDoProfessor(1, db.turmas), 3);
-  assert.equal(cargaDoProfessor(1, db.turmas, 1), 1);
+  assert.equal(cargaDoProfessor(1, db.turmas), 4);
+  assert.equal(cargaDoProfessor(1, db.turmas, 1), 2);
   assert.equal(cargaDoProfessor(99, db.turmas), 0);
 });
 

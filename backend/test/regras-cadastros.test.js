@@ -72,8 +72,8 @@ test('normalizarProfessor e validarProfessor (carga mínima = carga atual)', () 
   esperaErro(() => normalizarProfessor({ nome: 'Paula', area: 'R', cargaMaxima: 6 }), 400, /área/i);
   esperaErro(() => normalizarProfessor({ nome: 'Paula', area: 'Redes', cargaMaxima: 21 }), 400, /carga/i);
   const ana = db.professores.find((p) => p.id === 1);
-  esperaErro(() => validarProfessor({ ...ana, cargaMaxima: 2 }, db, ana), 409, /já leciona 3 horários/);
-  assert.doesNotThrow(() => validarProfessor({ ...ana, cargaMaxima: 3 }, db, ana));
+  esperaErro(() => validarProfessor({ ...ana, cargaMaxima: 3 }, db, ana), 409, /já leciona 4 horários/);
+  assert.doesNotThrow(() => validarProfessor({ ...ana, cargaMaxima: 4 }, db, ana));
 });
 
 test('validarHistorico exige disciplinas existentes e coerência de pré-requisitos', () => {
@@ -91,8 +91,10 @@ test('uso da disciplina: turmas, pré-requisito e histórico', () => {
   assert.match(algoritmos.motivos.join(' | '), /turmas ADS101-A, ADS101-B/);
   assert.match(algoritmos.motivos.join(' | '), /pré-requisito de/);
   assert.match(algoritmos.motivos.join(' | '), /histórico de 5 alunos/);
+  assert.match(algoritmos.motivos.join(' | '), /matriz de ADS, CC, SI, JOG/);
 
-  assert.deepEqual(usoDaDisciplina(12, db), { podeExcluir: true, motivos: [] });
+  db.disciplinas.push({ id: 99, codigo: 'XYZ999', nome: 'Avulsa', creditos: 2, preRequisitos: [] });
+  assert.deepEqual(usoDaDisciplina(99, db), { podeExcluir: true, motivos: [] });
 });
 
 test('uso do professor e do aluno', () => {

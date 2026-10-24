@@ -9,7 +9,7 @@ const dados = {
   cursos: [{ id: 1, nome: 'ADS' }],
   disciplinas: [{ id: 1, codigo: 'ADS101', nome: 'Algoritmos', creditos: 4, preRequisitos: [] }],
   professores: [{ id: 1, nome: 'Ana', area: 'Programação', cargaMaxima: 4 }],
-  alunos: [{ id: 1, matricula: '2026001', nome: 'Bruno', curso: 'ADS', aprovadas: [] }],
+  alunos: [{ id: 1, matricula: '2026001', nome: 'Bruno', cursoId: 1, aprovadas: [] }],
   turmas: [{ id: 1, disciplinaId: 1, professorId: 1, semestre: '2026/2', horarios: ['21'], vagas: 10, alunos: [] }],
 };
 
@@ -68,7 +68,7 @@ test('POST /api/alunos gera a matrícula no servidor e ignora a enviada', async 
   const resposta = await fetch(`${base}/alunos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome: '  Helena Costa ', curso: 'ADS', matricula: '0000000' }),
+    body: JSON.stringify({ nome: '  Helena Costa ', cursoId: 1, matricula: '0000000' }),
   });
   assert.equal(resposta.status, 201);
   const aluno = await resposta.json();
@@ -94,7 +94,7 @@ test('POST /api/alunos com curso não cadastrado devolve 400 com erro', async ()
   const resposta = await fetch(`${base}/alunos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome: 'Helena Costa', curso: 'Medicina' }),
+    body: JSON.stringify({ nome: 'Helena Costa', cursoId: 99 }),
   });
   assert.equal(resposta.status, 400);
   assert.match((await resposta.json()).erro, /curso/i);

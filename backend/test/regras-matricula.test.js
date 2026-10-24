@@ -54,7 +54,7 @@ test('R4: pré-requisitos faltando são listados pelo nome', () => {
 test('R5: turma lotada bloqueia', () => {
   const db = novoDb();
   turma(db, 3).alunos.push(GABRIELA);
-  const outro = { id: 50, nome: 'Teste', aprovadas: [1, 2] };
+  const outro = { id: 50, nome: 'Teste', cursoId: 1, aprovadas: [1, 2] };
   db.alunos.push(outro);
   assert.deepEqual(tipos(bloqueiosDeMatricula(outro, turma(db, 3), db)), ['lotada']);
 });

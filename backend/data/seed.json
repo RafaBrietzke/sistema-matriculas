@@ -1,9 +1,56 @@
 {
   "cursos": [
-    { "id": 1, "nome": "Análise e Desenvolvimento de Sistemas" },
-    { "id": 2, "nome": "Ciência da Computação" },
-    { "id": 3, "nome": "Sistemas de Informação" },
-    { "id": 4, "nome": "Jogos Digitais" }
+    { "id": 1, "nome": "Análise e Desenvolvimento de Sistemas", "sigla": "ADS", "etapas": 5,
+      "matriz": [
+        { "disciplinaId": 1, "etapa": 1 },
+        { "disciplinaId": 2, "etapa": 1 },
+        { "disciplinaId": 3, "etapa": 1 },
+        { "disciplinaId": 4, "etapa": 1 },
+        { "disciplinaId": 5, "etapa": 2 },
+        { "disciplinaId": 6, "etapa": 2 },
+        { "disciplinaId": 7, "etapa": 2 },
+        { "disciplinaId": 8, "etapa": 2 },
+        { "disciplinaId": 9, "etapa": 3 },
+        { "disciplinaId": 10, "etapa": 3 },
+        { "disciplinaId": 11, "etapa": 3 },
+        { "disciplinaId": 12, "etapa": 4 }
+      ]
+    },
+    { "id": 2, "nome": "Ciência da Computação", "sigla": "CC", "etapas": 8,
+      "matriz": [
+        { "disciplinaId": 1, "etapa": 1 },
+        { "disciplinaId": 3, "etapa": 1 },
+        { "disciplinaId": 13, "etapa": 1 },
+        { "disciplinaId": 5, "etapa": 2 },
+        { "disciplinaId": 6, "etapa": 2 },
+        { "disciplinaId": 14, "etapa": 2 },
+        { "disciplinaId": 9, "etapa": 3 },
+        { "disciplinaId": 15, "etapa": 3 },
+        { "disciplinaId": 11, "etapa": 3 }
+      ]
+    },
+    { "id": 3, "nome": "Sistemas de Informação", "sigla": "SI", "etapas": 8,
+      "matriz": [
+        { "disciplinaId": 1, "etapa": 1 },
+        { "disciplinaId": 2, "etapa": 1 },
+        { "disciplinaId": 4, "etapa": 1 },
+        { "disciplinaId": 16, "etapa": 1 },
+        { "disciplinaId": 6, "etapa": 2 },
+        { "disciplinaId": 7, "etapa": 2 },
+        { "disciplinaId": 8, "etapa": 2 },
+        { "disciplinaId": 17, "etapa": 2 },
+        { "disciplinaId": 11, "etapa": 3 }
+      ]
+    },
+    { "id": 4, "nome": "Jogos Digitais", "sigla": "JOG", "etapas": 6,
+      "matriz": [
+        { "disciplinaId": 1, "etapa": 1 },
+        { "disciplinaId": 3, "etapa": 1 },
+        { "disciplinaId": 18, "etapa": 1 },
+        { "disciplinaId": 5, "etapa": 2 },
+        { "disciplinaId": 19, "etapa": 2 }
+      ]
+    }
   ],
   "disciplinas": [
     { "id": 1, "codigo": "ADS101", "nome": "Algoritmos e Programação", "creditos": 4, "preRequisitos": [] },
@@ -17,7 +64,14 @@
     { "id": 9, "codigo": "ADS301", "nome": "Banco de Dados II", "creditos": 4, "preRequisitos": [5, 6] },
     { "id": 10, "codigo": "ADS302", "nome": "Programação Back-End", "creditos": 4, "preRequisitos": [6, 7] },
     { "id": 11, "codigo": "ADS303", "nome": "Redes de Computadores", "creditos": 4, "preRequisitos": [] },
-    { "id": 12, "codigo": "ADS401", "nome": "Projeto Integrador", "creditos": 4, "preRequisitos": [8, 10] }
+    { "id": 12, "codigo": "ADS401", "nome": "Projeto Integrador", "creditos": 4, "preRequisitos": [8, 10] },
+    { "id": 13, "codigo": "CMP101", "nome": "Cálculo I", "creditos": 4, "preRequisitos": [] },
+    { "id": 14, "codigo": "CMP201", "nome": "Teoria da Computação", "creditos": 4, "preRequisitos": [3] },
+    { "id": 15, "codigo": "CMP301", "nome": "Compiladores", "creditos": 4, "preRequisitos": [5, 14] },
+    { "id": 16, "codigo": "SIS101", "nome": "Fundamentos de Sistemas de Informação", "creditos": 4, "preRequisitos": [] },
+    { "id": 17, "codigo": "SIS201", "nome": "Gestão de Processos de Negócio", "creditos": 4, "preRequisitos": [16] },
+    { "id": 18, "codigo": "JOG101", "nome": "Fundamentos de Game Design", "creditos": 4, "preRequisitos": [] },
+    { "id": 19, "codigo": "JOG201", "nome": "Programação de Jogos", "creditos": 4, "preRequisitos": [1, 18] }
   ],
   "professores": [
     { "id": 1, "nome": "Ana Souza", "area": "Programação", "cargaMaxima": 6 },
@@ -27,12 +81,13 @@
     { "id": 5, "nome": "Juliana Costa", "area": "Infraestrutura", "cargaMaxima": 2 }
   ],
   "alunos": [
-    { "id": 1, "matricula": "2026001", "nome": "Bruno Lima", "curso": "Análise e Desenvolvimento de Sistemas", "aprovadas": [] },
-    { "id": 2, "matricula": "2025014", "nome": "Camila Torres", "curso": "Análise e Desenvolvimento de Sistemas", "aprovadas": [1, 2, 3, 4] },
-    { "id": 3, "matricula": "2025027", "nome": "Diego Martins", "curso": "Análise e Desenvolvimento de Sistemas", "aprovadas": [1, 2, 3] },
-    { "id": 4, "matricula": "2024008", "nome": "Eduarda Pereira", "curso": "Análise e Desenvolvimento de Sistemas", "aprovadas": [1, 2, 3, 4, 5, 6, 7, 8] },
-    { "id": 5, "matricula": "2025033", "nome": "Felipe Ramos", "curso": "Análise e Desenvolvimento de Sistemas", "aprovadas": [1, 3, 4, 11] },
-    { "id": 6, "matricula": "2024019", "nome": "Gabriela Nunes", "curso": "Análise e Desenvolvimento de Sistemas", "aprovadas": [1, 2, 4, 6] }
+    { "id": 1, "matricula": "2026001", "nome": "Bruno Lima", "cursoId": 1, "aprovadas": [] },
+    { "id": 2, "matricula": "2025014", "nome": "Camila Torres", "cursoId": 1, "aprovadas": [1, 2, 3, 4] },
+    { "id": 3, "matricula": "2025027", "nome": "Diego Martins", "cursoId": 1, "aprovadas": [1, 2, 3] },
+    { "id": 4, "matricula": "2024008", "nome": "Eduarda Pereira", "cursoId": 1, "aprovadas": [1, 2, 3, 4, 5, 6, 7, 8] },
+    { "id": 5, "matricula": "2025033", "nome": "Felipe Ramos", "cursoId": 1, "aprovadas": [1, 3, 4, 11] },
+    { "id": 6, "matricula": "2024019", "nome": "Gabriela Nunes", "cursoId": 1, "aprovadas": [1, 2, 4, 6] },
+    { "id": 7, "matricula": "2026002", "nome": "Hugo Alves", "cursoId": 4, "aprovadas": [] }
   ],
   "turmas": [
     { "id": 1, "codigo": "ADS101-A", "disciplinaId": 1, "professorId": 1, "semestre": "2026/2", "horarios": ["21", "41"], "vagas": 30, "alunos": [1] },
@@ -43,7 +98,8 @@
     { "id": 6, "codigo": "ADS204-A", "disciplinaId": 8, "professorId": 3, "semestre": "2026/2", "horarios": ["43"], "vagas": 30, "alunos": [2, 5] },
     { "id": 7, "codigo": "ADS102-A", "disciplinaId": 2, "professorId": 4, "semestre": "2026/2", "horarios": ["23"], "vagas": 35, "alunos": [1] },
     { "id": 8, "codigo": "ADS303-A", "disciplinaId": 11, "professorId": 5, "semestre": "2026/2", "horarios": ["61", "62"], "vagas": 30, "alunos": [] },
-    { "id": 9, "codigo": "ADS101-B", "disciplinaId": 1, "professorId": 3, "semestre": "2026/2", "horarios": ["52"], "vagas": 30, "alunos": [] }
+    { "id": 9, "codigo": "ADS101-B", "disciplinaId": 1, "professorId": 3, "semestre": "2026/2", "horarios": ["52"], "vagas": 30, "alunos": [] },
+    { "id": 10, "codigo": "JOG101-A", "disciplinaId": 18, "professorId": 1, "semestre": "2026/2", "horarios": ["51"], "vagas": 25, "alunos": [7] }
   ],
   "configuracoes": { "semestreAtual": "2026/2", "periodoMatriculaAberto": true, "limiteCreditos": 20 }
 }

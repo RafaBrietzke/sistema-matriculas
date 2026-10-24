@@ -1,5 +1,6 @@
 import { descreverHorario, horariosEmComum } from './horarios.js';
 import { turmasDoSemestre } from './oferta.js';
+import { etapaNoCurso } from './matriz.js';
 
 function turmasDoAluno(alunoId, db) {
   return turmasDoSemestre(db).filter((turma) => turma.alunos.includes(alunoId));
@@ -13,7 +14,7 @@ export function creditosMatriculados(alunoId, db) {
   return turmasDoAluno(alunoId, db).reduce((soma, turma) => soma + disciplinaDa(turma, db).creditos, 0);
 }
 
-// Motivos que impedem o aluno de se matricular na turma, na ordem das regras R1–R7.
+// Motivos que impedem o aluno de se matricular na turma (R1, R8 e R2–R7, nesta ordem).
 // Lista vazia = pode se matricular (ou já está matriculado).
 export function bloqueiosDeMatricula(aluno, turma, db) {
   if (turma.alunos.includes(aluno.id)) return [];
@@ -25,6 +26,11 @@ export function bloqueiosDeMatricula(aluno, turma, db) {
 
   if (!periodoMatriculaAberto) {
     bloqueios.push({ tipo: 'periodo', mensagem: 'O período de matrícula está fechado' });
+  }
+
+  const curso = db.cursos.find((c) => c.id === aluno.cursoId);
+  if (etapaNoCurso(curso, disciplina.id) === null) {
+    bloqueios.push({ tipo: 'fora-do-curso', mensagem: `Esta disciplina não faz parte da matriz de ${curso?.nome ?? 'seu curso'}` });
   }
 
   if (aluno.aprovadas.includes(disciplina.id)) {
@@ -67,6 +73,7 @@ export function bloqueiosDeMatricula(aluno, turma, db) {
 }
 
 export function ofertasDoAluno(aluno, db) {
+  const curso = db.cursos.find((c) => c.id === aluno.cursoId);
   const ofertas = turmasDoSemestre(db).map((turma) => {
     const disciplina = disciplinaDa(turma, db);
     const professor = db.professores.find((p) => p.id === turma.professorId);
@@ -79,11 +86,14 @@ export function ofertasDoAluno(aluno, db) {
       disciplina: { id: disciplina.id, codigo: disciplina.codigo, nome: disciplina.nome, creditos: disciplina.creditos },
       professor: { id: professor.id, nome: professor.nome },
       matriculado: turma.alunos.includes(aluno.id),
+      naMatriz: etapaNoCurso(curso, disciplina.id) !== null,
+      etapa: etapaNoCurso(curso, disciplina.id),
       bloqueios: bloqueiosDeMatricula(aluno, turma, db),
     };
   });
 
   return {
+    curso: curso ? { id: curso.id, nome: curso.nome, sigla: curso.sigla } : null,
     configuracoes: db.configuracoes,
     creditosMatriculados: creditosMatriculados(aluno.id, db),
     ofertas,
