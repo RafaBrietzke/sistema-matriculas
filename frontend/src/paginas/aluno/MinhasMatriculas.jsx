@@ -16,7 +16,7 @@ import ModalConfirmacao from '../../componentes/ModalConfirmacao';
 export default function MinhasMatriculas() {
   const { sessao } = useSessao();
   const { notificar } = useNotificacao();
-  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarOfertasDoAluno(sessao.id), [sessao.id]);
+  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarOfertasDoAluno(sessao.id), sessao.id);
   const [cancelando, setCancelando] = useState(null);
   const [processando, setProcessando] = useState(false);
 

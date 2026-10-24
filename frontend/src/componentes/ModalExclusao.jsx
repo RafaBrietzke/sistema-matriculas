@@ -10,7 +10,7 @@ export default function ModalExclusao({ item, recurso, aoFechar, aoExcluir, verb
   const [processando, setProcessando] = useState(false);
   const { dados: uso, carregando, erro } = useBuscaDados(
     () => (item ? requisicao(`/${recurso}/${item.id}/uso`) : Promise.resolve(null)),
-    [recurso, item?.id],
+    item && `${recurso}/${item.id}`,
   );
 
   async function confirmar() {

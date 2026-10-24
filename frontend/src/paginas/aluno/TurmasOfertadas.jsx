@@ -23,7 +23,7 @@ function paraEvento(oferta) {
 export default function TurmasOfertadas() {
   const { sessao } = useSessao();
   const { notificar } = useNotificacao();
-  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarOfertasDoAluno(sessao.id), [sessao.id]);
+  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarOfertasDoAluno(sessao.id), sessao.id);
   const [busca, setBusca] = useState('');
   const [dia, setDia] = useState('');
   const [turno, setTurno] = useState('');

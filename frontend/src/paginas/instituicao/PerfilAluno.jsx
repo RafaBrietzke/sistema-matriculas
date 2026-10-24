@@ -46,7 +46,7 @@ function Coluna({ icone, cor, titulo, quantidade, children }) {
 
 export default function PerfilAluno() {
   const { id } = useParams();
-  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarDados(id), [id]);
+  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarDados(id), id);
   const [editando, setEditando] = useState(false);
 
   if (carregando && !dados) {

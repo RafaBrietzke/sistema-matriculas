@@ -30,7 +30,7 @@ async function buscarDadosDoAluno(id) {
 
 export default function InicioAluno() {
   const { sessao } = useSessao();
-  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarDadosDoAluno(sessao.id), [sessao.id]);
+  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarDadosDoAluno(sessao.id), sessao.id);
 
   if (carregando) {
     return (

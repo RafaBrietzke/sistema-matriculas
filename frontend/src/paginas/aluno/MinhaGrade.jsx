@@ -28,7 +28,7 @@ function imprimirComprovante() {
 
 export default function MinhaGrade() {
   const { sessao } = useSessao();
-  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarDados(sessao.id), [sessao.id]);
+  const { dados, carregando, erro, recarregar } = useBuscaDados(() => buscarDados(sessao.id), sessao.id);
   const [emitidoEm] = useState(() => new Date().toLocaleString('pt-BR'));
 
   if (carregando && !dados) {

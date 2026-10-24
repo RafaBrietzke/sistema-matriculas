@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 
-export function useBuscaDados(funcaoBusca, dependencias = []) {
+export function useBuscaDados(funcaoBusca, chave = null) {
   const [dados, setDados] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
   const [versao, setVersao] = useState(0);
-
+  const buscar = useEffectEvent(funcaoBusca);
 
   useEffect(() => {
     let ativo = true;
@@ -14,7 +14,7 @@ export function useBuscaDados(funcaoBusca, dependencias = []) {
       setCarregando(true);
       setErro(null);
       try {
-        const resultado = await funcaoBusca();
+        const resultado = await buscar();
         if (ativo) setDados(resultado);
       } catch (e) {
         if (ativo) setErro(e.message);
@@ -27,7 +27,7 @@ export function useBuscaDados(funcaoBusca, dependencias = []) {
     return () => {
       ativo = false;
     };
-  }, [...dependencias, versao]);
+  }, [chave, versao]);
 
   function recarregar() {
     setVersao((atual) => atual + 1);
