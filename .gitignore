@@ -3,11 +3,5 @@ dist/
 .DS_Store
 *.log
 .env
-.specs/
 backend/data/db.json
 entrega/
-
-# Claude / specs e regras de negócio (spec-driven)
-.claude/
-CLAUDE.md
-CLAUDE.local.md

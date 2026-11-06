@@ -1,8 +1,50 @@
 # MatrículaFácil — Sistema de Atendimento e Matrículas
 
-Desafio da Atividade Acadêmica de Programação Front-End (UNISINOS, ADS).
+Desafio da Atividade Acadêmica de Programação Front-End (UNISINOS, Análise e Desenvolvimento de Sistemas, 2026/2).
+Trabalho individual de **Rafaela Brietzke**.
 
-O MatrículaFácil é uma aplicação web em que a **instituição** monta a oferta de turmas (disciplina + professor + horários) e os **alunos** se matriculam nelas. O sistema valida choque de horário, pré-requisitos, vagas e a carga dos professores.
+O MatrículaFácil é uma aplicação web em que a **instituição** monta a oferta de turmas do semestre (disciplina + professor + horários + vagas) e os **alunos** se matriculam nelas. O sistema impede choque de horário, falta de pré-requisito, turma lotada e sobrecarga de professores, e sempre **explica o motivo** de cada bloqueio.
+
+![Turmas ofertadas: cada turma indisponível mostra o motivo do bloqueio](docs/telas/14-turmas-ofertadas.png)
+
+| | |
+| --- | --- |
+| ![Formulário de nova turma com a grade de horários do professor](docs/telas/04-formulario-turma.png) | ![Grade semanal do aluno](docs/telas/16-minha-grade.png) |
+
+📄 **Documento de planejamento:** [docs/planejamento.pdf](docs/planejamento.pdf) (casos de uso, regras, telas, rotas, arquitetura, modelo de dados e API).
+
+## Funcionalidades
+
+**Instituição**
+
+- Cadastro de cursos (com matriz curricular por etapa), disciplinas (com pré-requisitos), professores e alunos.
+- Oferta de turmas com grade de horários clicável, controle da carga dos professores e código da turma gerado pelo servidor.
+- Grade geral do semestre, com filtros por professor e por disciplina.
+- Perfis do professor (carga, turmas e agenda) e do aluno (concluídas, em curso e faltam cursar).
+- Abertura e fechamento do período de matrícula.
+
+**Aluno**
+
+- Turmas ofertadas com o status de cada uma e todos os motivos de bloqueio.
+- Matrícula com prévia da grade e cancelamento.
+- Grade semanal e comprovante de matrícula para impressão.
+
+**Geral:** login simulado por perfil com rotas protegidas, tema claro e escuro e layout para celular.
+
+## Regras de matrícula
+
+| # | Bloqueia quando |
+| - | --------------- |
+| R1 | O período de matrícula está fechado |
+| R8 | A disciplina não está na matriz do curso do aluno |
+| R2 | O aluno já foi aprovado na disciplina |
+| R3 | O aluno já está em outra turma da mesma disciplina |
+| R4 | Falta algum pré-requisito |
+| R5 | A turma está lotada |
+| R6 | Algum horário coincide com uma turma em que o aluno já está |
+| R7 | Os créditos passariam do limite do semestre |
+
+As regras ficam no servidor (que recusa com `409` e o motivo), e a tela recebe os bloqueios já calculados para desabilitar o botão antes do clique.
 
 ## Tecnologias
 
@@ -27,7 +69,7 @@ npm run seed   # cria/restaura os dados de demonstração
 npm run dev    # inicia a API em http://localhost:3001/api
 ```
 
-### 2. Front-end (na porta 5173)
+### 2. Front-end (porta 5173)
 
 Em outro terminal:
 
@@ -37,37 +79,51 @@ npm install
 npm run dev    # abre em http://localhost:5173
 ```
 
-### Testes do back-end
+## Demonstração
+
+O login é simulado: na tela inicial, escolha **Instituição** ou um dos alunos. Os dados do seed já trazem cenários prontos:
+
+- **Camila Torres:** vê turmas bloqueadas por choque de horário, por já ter sido aprovada e por falta de pré-requisito.
+- **Gabriela Nunes:** ao se matricular em `ADS203-A`, a turma lota (3/3).
+- **Hugo Alves** (Jogos Digitais): as turmas de ADS aparecem bloqueadas por estarem fora do curso dele.
+- **Instituição:** ao fechar o período de matrícula no painel, os alunos passam a só consultar.
+
+Para voltar aos dados originais a qualquer momento, rode `npm run seed` na pasta `backend`.
+
+## Testes e qualidade
 
 ```bash
 cd backend
-npm test
+npm test        # 88 testes automáticos
+
+cd frontend
+npm run lint    # sem erros e sem avisos
+npm run build   # build de produção
 ```
 
-## Perfis de acesso
-
-O login é simulado. Na tela inicial, escolha:
-
-- **Instituição**: cadastros, oferta de turmas e grade geral.
-- **Um dos alunos**: turmas ofertadas, matrículas e grade pessoal.
-
-Para voltar aos dados originais a qualquer momento, rode `npm run seed` na pasta `backend`.
+Os testes cobrem as regras de matrícula (R1–R8), de oferta, de cadastros e da matriz curricular, as rotas da API sobre um banco temporário, a leitura e gravação do arquivo, a migração de dados antigos e a coerência do seed.
 
 ## Estrutura
 
 ```
 backend/
-  data/seed.json        dados de demonstração
-  data/db.json          dados em uso (gerado pelo seed)
-  src/app.js            montagem da API (rotas e middlewares)
-  src/db.js             leitura e gravação do arquivo JSON
-  src/rotas/            rotas da API
-  test/                 testes automáticos
+  data/seed.json          dados de demonstração
+  scripts/seed.js         restaura o db.json a partir do seed
+  src/app.js              montagem da API (rotas e middlewares)
+  src/db.js               leitura e gravação do arquivo JSON
+  src/migracoes.js        atualiza um db.json antigo sem perder dados
+  src/regras/             regras de negócio (funções puras)
+  src/rotas/              rotas REST por recurso
+  test/                   testes automáticos (node:test)
 frontend/
-  src/api/              chamadas HTTP para a API
-  src/contexto/         sessão do usuário (Context API)
-  src/componentes/      layout, navbar, proteção de rotas e componentes comuns
-  src/hooks/            hook de busca de dados
-  src/paginas/          telas da aplicação
-.specs/                 planejamento (visão, roadmap, especificações e tarefas)
+  src/api/cliente.js      chamadas HTTP (fetch)
+  src/contexto/           sessão e notificações (Context API)
+  src/hooks/              useBuscaDados, useTema
+  src/componentes/        layout, grade horária, modais, painel lateral…
+  src/paginas/            telas da instituição e do aluno
+  src/utilitarios/        horários, cores, indicadores
+  src/estilos/            tema (claro/escuro) e layout
+docs/
+  planejamento.md / .pdf  documento de planejamento
+  telas/                  prints da aplicação
 ```
