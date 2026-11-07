@@ -86,8 +86,9 @@ Professores (nome, área, carga máxima de 1 a 20 horários), alunos (nome, curs
 
 **Fluxos alternativos:**
 
-- **A1 — Carga máxima:** se a carga projetada do professor passar do máximo, o botão de salvar é desabilitado com a explicação (API: 409).
-- **A2 — Carga acima da média:** um aviso (que não bloqueia) sugere o professor com menor carga.
+- **A1 — Carga máxima:** se a carga projetada do professor passar do máximo, o botão de salvar é desabilitado com a explicação e a sugestão de outro professor (API: 409).
+- **A2 — Carga acima da média:** um aviso (que não bloqueia) sugere outro professor.
+- **Sugestão de professor:** nos dois casos, e também no choque de horário, o sistema indica o professor com a carga mais livre que ainda comporte os horários marcados sem choque.
 - **A3 — Turma com alunos:** disciplina e horários ficam travados; as vagas não podem ficar abaixo do número de matriculados.
 - **A4 — Exclusão:** um modal confirma informando quantos alunos serão desmatriculados.
 
@@ -364,6 +365,7 @@ Base: `http://localhost:3001/api`. Todas as respostas são JSON. Os erros vêm c
 | Estado (`useState`) e formulários controlados | Formulários de `paginas/instituicao/` (ex.: `FormularioTurma.jsx`, `Alunos.jsx`) |
 | Efeitos (`useEffect`) | `hooks/useBuscaDados.js`, `hooks/useTema.js`, `componentes/PainelLateral.jsx` |
 | Hook personalizado | `hooks/useBuscaDados.js` (carregando / erro / dados / recarregar) |
+| Componente de classe e Error Boundary | `componentes/LimiteErro.jsx` (`getDerivedStateFromError` e `componentDidCatch`), que envolve o conteúdo das páginas em `LayoutApp.jsx`: um erro de execução numa tela mostra um aviso, sem derrubar o menu |
 | Context API | `contexto/SessaoProvider.jsx` (sessão) e `contexto/NotificacaoProvider.jsx` (notificações) |
 | React Router | `App.jsx` (rotas aninhadas), `RotaProtegida.jsx`, `NavLink` na barra lateral, `useParams`, `useSearchParams`, `useNavigate` |
 | `fetch` com `async/await` | `api/cliente.js` (único ponto de acesso à API) |
