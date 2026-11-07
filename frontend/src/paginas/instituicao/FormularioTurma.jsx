@@ -96,8 +96,20 @@ function Formulario({ titulo, turma, turmas, disciplinas, professores }) {
   const cargaProjetada = (professor?.carga ?? 0) + form.horarios.length;
   const excedeCarga = professor && cargaProjetada > professor.cargaMaxima;
   const usoProjetado = professor ? percentual(cargaProjetada, professor.cargaMaxima) : 0;
-  const sugestao = comCarga[0];
-  const acimaDaMedia = professor && form.horarios.length > 0 && !excedeCarga && usoProjetado > usoMedio && sugestao.id !== professor.id;
+  const sugestao = comCarga.find(
+    (p) =>
+      p.id !== professor?.id &&
+      p.carga + form.horarios.length <= p.cargaMaxima &&
+      !outrasTurmas.some((t) => t.professorId === p.id && t.horarios.some((h) => form.horarios.includes(h))),
+  );
+  const usoSugestao = sugestao ? percentual(sugestao.carga + form.horarios.length, sugestao.cargaMaxima) : 0;
+  const acimaDaMedia =
+    professor && form.horarios.length > 0 && !excedeCarga && usoProjetado > usoMedio && sugestao && usoSugestao < usoProjetado;
+  const textoSugestao = sugestao && (
+    <>
+      {' '}Sugestão: <strong>{sugestao.nome}</strong> ({sugestao.carga}/{sugestao.cargaMaxima} horários).
+    </>
+  );
 
   const vagas = Number(form.vagas);
   const erros = {
@@ -262,19 +274,21 @@ function Formulario({ titulo, turma, turmas, disciplinas, professores }) {
                 <div className="alert alert-danger small mb-0">
                   <i className="bi bi-x-circle me-1" aria-hidden="true" />
                   {professor.nome} passaria da carga máxima ({cargaProjetada} de {professor.cargaMaxima} horários).
+                  {textoSugestao}
                 </div>
               )}
               {horariosEmChoque.length > 0 && (
                 <div className="alert alert-danger small mb-0">
                   <i className="bi bi-x-circle me-1" aria-hidden="true" />
                   {professor.nome} já dá aula em {horariosEmChoque.length === 1 ? 'um dos horários' : 'alguns dos horários'} escolhidos.
+                  {textoSugestao}
                 </div>
               )}
               {acimaDaMedia && (
                 <div className="alert alert-warning small mb-0">
                   <i className="bi bi-exclamation-triangle me-1" aria-hidden="true" />
                   {professor.nome} ficará com {usoProjetado}% da carga, acima da média ({Math.round(usoMedio)}%).
-                  Sugestão: <strong>{sugestao.nome}</strong> ({sugestao.carga}/{sugestao.cargaMaxima} horários).
+                  {textoSugestao}
                 </div>
               )}
               {erroServidor && (
