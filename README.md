@@ -1,7 +1,7 @@
 # MatrículaFácil — Sistema de Atendimento e Matrículas
 
 Desafio da Atividade Acadêmica de Programação Front-End (UNISINOS, Análise e Desenvolvimento de Sistemas, 2026/2).
-Trabalho individual de **Rafaela Brietzke**.
+Desenvolvido por **Rafaela Brietzke**.
 
 O MatrículaFácil é uma aplicação web em que a **instituição** monta a oferta de turmas do semestre (disciplina + professor + horários + vagas) e os **alunos** se matriculam nelas. O sistema impede choque de horário, falta de pré-requisito, turma lotada e sobrecarga de professores, e sempre **explica o motivo** de cada bloqueio.
 
@@ -35,14 +35,14 @@ O MatrículaFácil é uma aplicação web em que a **instituição** monta a ofe
 
 | # | Bloqueia quando |
 | - | --------------- |
-| R1 | O período de matrícula está fechado |
-| R8 | A disciplina não está na matriz do curso do aluno |
-| R2 | O aluno já foi aprovado na disciplina |
-| R3 | O aluno já está em outra turma da mesma disciplina |
-| R4 | Falta algum pré-requisito |
-| R5 | A turma está lotada |
-| R6 | Algum horário coincide com uma turma em que o aluno já está |
-| R7 | Os créditos passariam do limite do semestre |
+| 1 | O período de matrícula está fechado |
+| 2 | A disciplina não está na matriz do curso do aluno |
+| 3 | O aluno já foi aprovado na disciplina |
+| 4 | O aluno já está em outra turma da mesma disciplina |
+| 5 | Falta algum pré-requisito |
+| 6 | A turma está lotada |
+| 7 | Algum horário coincide com uma turma em que o aluno já está |
+| 8 | Os créditos passariam do limite do semestre |
 
 As regras ficam no servidor (que recusa com `409` e o motivo), e a tela recebe os bloqueios já calculados para desabilitar o botão antes do clique.
 
@@ -101,7 +101,7 @@ npm run lint    # sem erros e sem avisos
 npm run build   # build de produção
 ```
 
-Os testes cobrem as regras de matrícula (R1–R8), de oferta, de cadastros e da matriz curricular, as rotas da API sobre um banco temporário, a leitura e gravação do arquivo, a migração de dados antigos e a coerência do seed.
+Os testes cobrem as 8 regras de matrícula, de oferta, de cadastros e da matriz curricular, as rotas da API sobre um banco temporário, a leitura e gravação do arquivo, a migração de dados antigos e a coerência do seed.
 
 ## Estrutura
 

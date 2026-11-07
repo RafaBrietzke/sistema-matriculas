@@ -6,7 +6,7 @@
 | --- | --- |
 | Atividade acadêmica | Programação Front-End — Análise e Desenvolvimento de Sistemas (UNISINOS) |
 | Tema | Desafio: sistema de atendimento e matrículas |
-| Autora | Rafaela Brietzke (trabalho individual) |
+| Autora | Rafaela Brietzke |
 | Semestre | 2026/2 |
 
 ---
@@ -44,7 +44,7 @@ Numa instituição de ensino, a oferta de turmas e a matrícula dos alunos costu
 
 ## 2. Casos de uso
 
-### UC1 — Cadastros base
+### 2.1 Cadastros base
 
 | | |
 | --- | --- |
@@ -63,12 +63,12 @@ Professores (nome, área, carga máxima de 1 a 20 horários), alunos (nome, curs
 
 **Fluxos alternativos:**
 
-- **A1 — Ciclo de pré-requisitos:** se marcar um pré-requisito criaria um ciclo (A → B → A), a opção aparece desabilitada com o motivo, e a API recusa com 409.
-- **A2 — Histórico incoerente:** no cadastro do aluno, uma disciplina só pode ser marcada como aprovada se os pré-requisitos dela também estiverem marcados, e não pode ser desmarcada se outra marcada depende dela.
-- **A3 — Exclusão protegida:** antes de excluir, o sistema consulta onde o registro é usado. Se houver uso (disciplina com turmas, professor com turmas, aluno matriculado, disciplina na matriz de um curso), os motivos são listados e o botão de excluir fica desabilitado.
-- **A4 — Dados inválidos:** campos fora das regras mostram a mensagem no próprio formulário (validação também feita na API, com resposta 400).
+- **Ciclo de pré-requisitos:** se marcar um pré-requisito criaria um ciclo (A → B → A), a opção aparece desabilitada com o motivo, e a API recusa com 409.
+- **Histórico incoerente:** no cadastro do aluno, uma disciplina só pode ser marcada como aprovada se os pré-requisitos dela também estiverem marcados, e não pode ser desmarcada se outra marcada depende dela.
+- **Exclusão protegida:** antes de excluir, o sistema consulta onde o registro é usado. Se houver uso (disciplina com turmas, professor com turmas, aluno matriculado, disciplina na matriz de um curso), os motivos são listados e o botão de excluir fica desabilitado.
+- **Dados inválidos:** campos fora das regras mostram a mensagem no próprio formulário (validação também feita na API, com resposta 400).
 
-### UC2 — Montar a oferta de turmas
+### 2.2 Montar a oferta de turmas
 
 | | |
 | --- | --- |
@@ -86,13 +86,13 @@ Professores (nome, área, carga máxima de 1 a 20 horários), alunos (nome, curs
 
 **Fluxos alternativos:**
 
-- **A1 — Carga máxima:** se a carga projetada do professor passar do máximo, o botão de salvar é desabilitado com a explicação e a sugestão de outro professor (API: 409).
-- **A2 — Carga acima da média:** um aviso (que não bloqueia) sugere outro professor.
+- **Carga máxima:** se a carga projetada do professor passar do máximo, o botão de salvar é desabilitado com a explicação e a sugestão de outro professor (API: 409).
+- **Carga acima da média:** um aviso (que não bloqueia) sugere outro professor.
 - **Sugestão de professor:** nos dois casos, e também no choque de horário, o sistema indica o professor com a carga mais livre que ainda comporte os horários marcados sem choque.
-- **A3 — Turma com alunos:** disciplina e horários ficam travados; as vagas não podem ficar abaixo do número de matriculados.
-- **A4 — Exclusão:** um modal confirma informando quantos alunos serão desmatriculados.
+- **Turma com alunos:** disciplina e horários ficam travados; as vagas não podem ficar abaixo do número de matriculados.
+- **Exclusão:** um modal confirma informando quantos alunos serão desmatriculados.
 
-### UC3 — Matrícula do aluno
+### 2.3 Matrícula do aluno
 
 | | |
 | --- | --- |
@@ -110,11 +110,11 @@ Professores (nome, área, carga máxima de 1 a 20 horários), alunos (nome, curs
 
 **Fluxos alternativos:**
 
-- **A1 — Regra violada no servidor:** se outra pessoa lotou a turma nesse meio-tempo, a API responde 409 com o motivo, o front mostra a mensagem e recarrega a lista.
-- **A2 — Período fechado:** a página vira só consulta, e matricular ou cancelar fica bloqueado.
-- **A3 — Fora do curso:** por padrão o aluno vê só as turmas do curso dele; o filtro mostra as demais, bloqueadas pela regra R8.
+- **Regra violada no servidor:** se outra pessoa lotou a turma nesse meio-tempo, a API responde 409 com o motivo, o front mostra a mensagem e recarrega a lista.
+- **Período fechado:** a página vira só consulta, e matricular ou cancelar fica bloqueado.
+- **Fora do curso:** por padrão o aluno vê só as turmas do curso dele; o filtro mostra as demais, bloqueadas pela regra 2 da matrícula.
 
-### UC4 — Grade horária visual
+### 2.4 Grade horária visual
 
 | | |
 | --- | --- |
@@ -130,8 +130,8 @@ Professores (nome, área, carga máxima de 1 a 20 horários), alunos (nome, curs
 
 **Fluxos alternativos:**
 
-- **A1 — Sem matrículas:** aparece um estado vazio com um link para as turmas ofertadas.
-- **A2 — Celular:** abaixo de 768px a tabela vira uma agenda por dia, sem rolagem lateral.
+- **Sem matrículas:** aparece um estado vazio com um link para as turmas ofertadas.
+- **Celular:** abaixo de 768px a tabela vira uma agenda por dia, sem rolagem lateral.
 
 ---
 
@@ -150,14 +150,14 @@ Professores (nome, área, carga máxima de 1 a 20 horários), alunos (nome, curs
 
 | # | Bloqueia quando | Exemplo de mensagem |
 | --- | --- | --- |
-| R1 | O período de matrícula está fechado | "O período de matrícula está fechado" |
-| R8 | A disciplina não está na matriz do curso do aluno | "Esta disciplina não faz parte da matriz de Jogos Digitais" |
-| R2 | O aluno já foi aprovado na disciplina | "Você já foi aprovado em Algoritmos e Programação" |
-| R3 | O aluno já está em outra turma da mesma disciplina | "Você já está na turma ADS101-A desta disciplina" |
-| R4 | Falta algum pré-requisito | "Faltam pré-requisitos: Estruturas de Dados, Banco de Dados I" |
-| R5 | A turma está lotada | "Turma lotada" |
-| R6 | Algum horário coincide com uma turma em que o aluno já está | "Choque de horário com ADS203-A (Ter · Noite)" |
-| R7 | Os créditos passariam do limite do semestre | "Passaria do limite de 20 créditos (16 + 4)" |
+| 1 | O período de matrícula está fechado | "O período de matrícula está fechado" |
+| 2 | A disciplina não está na matriz do curso do aluno | "Esta disciplina não faz parte da matriz de Jogos Digitais" |
+| 3 | O aluno já foi aprovado na disciplina | "Você já foi aprovado em Algoritmos e Programação" |
+| 4 | O aluno já está em outra turma da mesma disciplina | "Você já está na turma ADS101-A desta disciplina" |
+| 5 | Falta algum pré-requisito | "Faltam pré-requisitos: Estruturas de Dados, Banco de Dados I" |
+| 6 | A turma está lotada | "Turma lotada" |
+| 7 | Algum horário coincide com uma turma em que o aluno já está | "Choque de horário com ADS203-A (Ter · Noite)" |
+| 8 | Os créditos passariam do limite do semestre | "Passaria do limite de 20 créditos (16 + 4)" |
 
 As mesmas funções calculam os bloqueios que o front exibe e validam a matrícula no servidor. Assim, a tela nunca promete algo que a API vai recusar.
 
@@ -379,7 +379,7 @@ Base: `http://localhost:3001/api`. Todas as respostas são JSON. Os erros vêm c
 
 ## 10. Qualidade
 
-- **Testes automatizados no back-end:** 88 testes com `node:test` (sem bibliotecas extras). Cobrem as regras puras (matrícula R1–R8, oferta, cadastros e matriz curricular), as rotas da API em cima de um banco temporário, a leitura e gravação do arquivo, a migração de dados antigos e a coerência do seed. Para rodar: `cd backend && npm test`.
+- **Testes automatizados no back-end:** 88 testes com `node:test` (sem bibliotecas extras). Cobrem as regras puras (as 8 regras de matrícula, oferta, cadastros e matriz curricular), as rotas da API em cima de um banco temporário, a leitura e gravação do arquivo, a migração de dados antigos e a coerência do seed. Para rodar: `cd backend && npm test`.
 - **Front-end:** o build de produção (`npm run build`) e o lint (`npm run lint`) passam sem erros e sem avisos. Cada caso de uso foi verificado no navegador com um roteiro de cenários, repetido como teste de regressão a cada entrega.
 - **Mensagens claras:** toda recusa da API traz o motivo em português, e o front mostra esse motivo no lugar certo (campo, notificação ou cartão da turma).
 - **Acessibilidade básica:** rótulos nos campos, `aria-label` nos botões só com ícone, `Esc` fecha o menu, os painéis e os modais, e o foco vai para o botão seguro (Cancelar) quando um modal de confirmação abre.
