@@ -50,7 +50,7 @@ As regras ficam no servidor (que recusa com `409` e o motivo), e a tela recebe o
 
 | Camada | Tecnologias |
 | ------ | ----------- |
-| Front-end | React 19, Vite, React Router, Bootstrap 5 + Bootstrap Icons, `fetch` + `async/await`, Context API |
+| Front-end | React 19, Vite, React Router, Bootstrap 5 + Bootstrap Icons, `fetch` + `async/await`, Context API, Error Boundary |
 | Back-end | Node.js 22, Express 5, persistência em arquivo JSON |
 | Testes | `node:test` (back-end) |
 
