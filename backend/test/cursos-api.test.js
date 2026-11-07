@@ -60,7 +60,7 @@ test('DELETE matriz remove só o que não está em uso', async () => {
   assert.equal((await chamar('DELETE', '/cursos/1/matriz/12')).status, 404);
 });
 
-test('R8: aluno de Jogos Digitais não se matricula em disciplina de ADS', async () => {
+test('regra 2: aluno de Jogos Digitais não se matricula em disciplina de ADS', async () => {
   const ofertas = await chamar('GET', '/alunos/7/ofertas');
   assert.equal(ofertas.corpo.curso.sigla, 'JOG');
   const fundamentosWeb = ofertas.corpo.ofertas.find((o) => o.codigo === 'ADS102-A');

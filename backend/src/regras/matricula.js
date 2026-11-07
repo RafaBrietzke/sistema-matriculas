@@ -14,7 +14,7 @@ export function creditosMatriculados(alunoId, db) {
   return turmasDoAluno(alunoId, db).reduce((soma, turma) => soma + disciplinaDa(turma, db).creditos, 0);
 }
 
-// Motivos que impedem o aluno de se matricular na turma (R1, R8 e R2–R7, nesta ordem).
+// Motivos que impedem o aluno de se matricular na turma, na ordem das regras 1 a 8.
 // Lista vazia = pode se matricular (ou já está matriculado).
 export function bloqueiosDeMatricula(aluno, turma, db) {
   if (turma.alunos.includes(aluno.id)) return [];

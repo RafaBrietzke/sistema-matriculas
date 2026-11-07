@@ -23,35 +23,35 @@ test('turma em que o aluno já está matriculado não tem bloqueios', () => {
   assert.deepEqual(bloqueiosDeMatricula(aluno(db, CAMILA), turma(db, 3), db), []);
 });
 
-test('R1: período fechado bloqueia', () => {
+test('regra 1: período fechado bloqueia', () => {
   const db = novoDb();
   db.configuracoes.periodoMatriculaAberto = false;
   const bloqueios = bloqueiosDeMatricula(aluno(db, GABRIELA), turma(db, 3), db);
   assert.deepEqual(tipos(bloqueios), ['periodo']);
 });
 
-test('R2: disciplina já aprovada bloqueia', () => {
+test('regra 3: disciplina já aprovada bloqueia', () => {
   const db = novoDb();
   const [bloqueio] = bloqueiosDeMatricula(aluno(db, CAMILA), turma(db, 1), db);
   assert.equal(bloqueio.tipo, 'aprovada');
   assert.match(bloqueio.mensagem, /Algoritmos e Programação/);
 });
 
-test('R3: outra turma da mesma disciplina bloqueia', () => {
+test('regra 4: outra turma da mesma disciplina bloqueia', () => {
   const db = novoDb();
   const bloqueios = bloqueiosDeMatricula(aluno(db, BRUNO), turma(db, 9), db);
   assert.deepEqual(tipos(bloqueios), ['mesma-disciplina']);
   assert.match(bloqueios[0].mensagem, /ADS101-A/);
 });
 
-test('R4: pré-requisitos faltando são listados pelo nome', () => {
+test('regra 5: pré-requisitos faltando são listados pelo nome', () => {
   const db = novoDb();
   const bloqueios = bloqueiosDeMatricula(aluno(db, BRUNO), turma(db, 5), db);
   assert.deepEqual(tipos(bloqueios), ['pre-requisito']);
   assert.match(bloqueios[0].mensagem, /Estruturas de Dados, Banco de Dados I/);
 });
 
-test('R5: turma lotada bloqueia', () => {
+test('regra 6: turma lotada bloqueia', () => {
   const db = novoDb();
   turma(db, 3).alunos.push(GABRIELA);
   const outro = { id: 50, nome: 'Teste', cursoId: 1, aprovadas: [1, 2] };
@@ -59,14 +59,14 @@ test('R5: turma lotada bloqueia', () => {
   assert.deepEqual(tipos(bloqueiosDeMatricula(outro, turma(db, 3), db)), ['lotada']);
 });
 
-test('R6: choque de horário cita a turma e o horário', () => {
+test('regra 7: choque de horário cita a turma e o horário', () => {
   const db = novoDb();
   const bloqueios = bloqueiosDeMatricula(aluno(db, CAMILA), turma(db, 2), db);
   assert.deepEqual(tipos(bloqueios), ['choque']);
   assert.match(bloqueios[0].mensagem, /ADS203-A .*Ter · Noite/);
 });
 
-test('R7: limite de créditos bloqueia e mostra a conta', () => {
+test('regra 8: limite de créditos bloqueia e mostra a conta', () => {
   const db = novoDb();
   db.configuracoes.limiteCreditos = 8;
   const bloqueios = bloqueiosDeMatricula(aluno(db, CAMILA), turma(db, 4), db);
