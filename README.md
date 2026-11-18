@@ -13,6 +13,8 @@ O MatrículaFácil é uma aplicação web em que a **instituição** monta a ofe
 
 📄 **Documento de planejamento:** [docs/planejamento.pdf](docs/planejamento.pdf) (casos de uso, regras, telas, rotas, arquitetura, modelo de dados e API).
 
+🎬 **Vídeo de apresentação:** [docs/video-apresentacao-final.mp4](docs/video-apresentacao-final.mp4) (execução do sistema e partes principais do código).
+
 ## Funcionalidades
 
 **Instituição**
